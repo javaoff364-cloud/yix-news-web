@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YIX News API Dashboard</title>
+<style>
+body{margin:0;background:#080b12;color:#fff;font-family:system-ui;padding:25px}
+main{max-width:700px;margin:auto}
+h1{font-size:40px}
+.card{background:#111722;border:1px solid #202938;border-radius:20px;padding:25px;margin-top:20px}
+button{background:#2563eb;color:white;border:0;padding:13px 20px;border-radius:12px;font-weight:800;cursor:pointer}
+.key{background:#080b12;border:1px solid #303b4d;padding:15px;border-radius:12px;word-break:break-all}
+a{color:#60a5fa}
+small{color:#9ca3af}
+</style>
+</head>
+<body>
+
+<main>
+
+<p><a href="index.html">← YIX News</a></p>
+
+<h1>API Dashboard</h1>
+
+<div class="card" id="login">
+<h2>🔐 Telegram orqali kirish</h2>
+
+<p>
+API'dan foydalanish uchun Telegram account orqali
+autentifikatsiyadan o'ting.
+</p>
+
+<div id="telegram-login"></div>
+
+<p>
+<small>
+Login orqali sizga shaxsiy YIX News API key beriladi.
+</small>
+</p>
+</div>
+
+<div class="card" id="dashboard" style="display:none">
+
+<h2>👤 Account</h2>
+
+<p id="user"></p>
+
+<h2>🔑 API Key</h2>
+
+<div class="key" id="key">
+API key shu yerda ko‘rinadi
+</div>
+
+<p><small>
+API keyni hech kimga bermang.
+</small></p>
+
+<h2>📊 Usage</h2>
+
+<p id="usage"></p>
+
+<button onclick="regenerate()">
+</button>
+
+</div>
+
+</main>
+
+<script>
+const API="https://yix-news.onrender.com";
+
+function showDashboard(data){
+
+ document.getElementById("login").style.display="none";
+ document.getElementById("dashboard").style.display="block";
+
+ if(data.api_key){
+   document.getElementById("key").textContent=data.api_key;
+ }
+
+ if(data.user){
+
+   const u=data.user;
+
+   document.getElementById("user").textContent=
+     `${u.first_name || ""} ${u.last_name || ""} @${u.username || "user"}`;
+
+   const used=u.requests_today||0;
+   const limit=data.limit||1000;
+
+   document.getElementById("usage").textContent=
+     `${used} / ${limit} requests today`;
+ }
+}
+
+async function telegramLogin(user){
+
+ const res=await fetch(
+   API+"/api/auth/telegram",
+   {
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({auth:user})
+   }
+ );
+
+ const data=await res.json();
+
+ if(!data.success){
+   alert(data.error||"Login xatosi");
+   return;
+ }
+
+ if(data.api_key){
+   showDashboard(data);
+
+   localStorage.setItem(
+     "yix_api_key",
+     data.api_key
+   );
+ }else{
+   alert(data.message);
+ }
+}
+
+function regenerate(){
+
+ const key=localStorage.getItem("yix_api_key");
+
+ if(!key)return;
+
+ fetch(
+   API+"/api/key/regenerate",
+   {
+     method:"POST",
+     headers:{
+       Authorization:"Bearer "+key
+     }
+   }
+ )
+ .then(r=>r.json())
+ .then(data=>{
+
+   if(data.api_key){
+
+     document.getElementById("key").textContent=
+       data.api_key;
+
+     localStorage.setItem(
+       "yix_api_key",
+       data.api_key
+     );
+
+     alert("✅ Yangi API key yaratildi");
+   }
+ });
+}
+
+const script=document.createElement("script");
+
+script.src=
+ "https://telegram.org/js/telegram-widget.js?22";
+
+script.setAttribute("data-telegram-login","YIXNewsBot");
+script.setAttribute("data-size","large");
+script.setAttribute("data-userpic","false");
+
+script.onload=()=>{
+
+};
+
+document.getElementById("telegram-login")
+ .appendChild(script);
+
+/*
+ Telegram widget callback:
+ Telegram Login Widget uchun callback URL
+ sifatida ushbu sahifani ishlatamiz.
+*/
+window.onTelegramAuth=function(user){
+ telegramLogin(user);
+};
+
+const old=localStorage.getItem("yix_api_key");
+
+if(old){
+
+ fetch(
+   API+"/api/me",
+   {
+     headers:{
+       Authorization:"Bearer "+old
+     }
+   }
+ )
+ .then(r=>r.json())
+ .then(data=>{
+   if(data.success){
+     showDashboard({
+       user:data.user,
+       limit:data.daily_limit
+     });
+   }
+ });
+}
+</script>
+
+</body>
+</html>
