@@ -219,18 +219,34 @@ const searchInput = document.getElementById("search");
 
 let allNews = [];
 let currentCategory = "";
+let offset = 0;
+const PAGE_SIZE = 50;
+let loading = false;
 
-async function loadNews(category = "") {
+async function loadNews(category = "", reset = true) {
 
+    if (loading) return;
+
+    if (reset) {
+        offset = 0;
+        allNews = [];
+        newsContainer.innerHTML = "";
+    }
+
+    loading = true;
     statusEl.textContent = "⏳ Yangiliklar yuklanmoqda...";
-    newsContainer.innerHTML = "";
 
     try {
 
-        let url = API;
+        let url =
+            API +
+            "?limit=" + PAGE_SIZE +
+            "&offset=" + offset;
 
         if (category) {
-            url += "?category=" + encodeURIComponent(category);
+            url +=
+                "&category=" +
+                encodeURIComponent(category);
         }
 
         const response = await fetch(url);
@@ -245,12 +261,20 @@ async function loadNews(category = "") {
             throw new Error("News API ishlamadi");
         }
 
-        allNews = data.news || [];
+        const newNews = data.news || [];
+
+        allNews = reset
+            ? newNews
+            : [...allNews, ...newNews];
+
+        offset += newNews.length;
 
         renderNews(allNews);
 
         statusEl.textContent =
             `📰 ${allNews.length} ta yangilik`;
+
+        updateLoadMore(newNews.length);
 
     } catch (error) {
 
@@ -259,13 +283,49 @@ async function loadNews(category = "") {
         statusEl.textContent =
             "❌ Yangiliklarni yuklashda xatolik";
 
-        newsContainer.innerHTML = `
-            <div class="empty">
-                <h2>Yangiliklar yuklanmadi</h2>
-                <p>Server bilan aloqa vaqtincha mavjud emas.</p>
-            </div>
-        `;
+    } finally {
+
+        loading = false;
     }
+}
+
+function updateLoadMore(count) {
+
+    let oldButton =
+        document.getElementById("load-more");
+
+    if (oldButton) {
+        oldButton.remove();
+    }
+
+    if (count < PAGE_SIZE) {
+        return;
+    }
+
+    const button =
+        document.createElement("button");
+
+    button.id = "load-more";
+    button.textContent =
+        "⬇️ Yana 50 ta yangilik";
+
+    button.style.display = "block";
+    button.style.margin = "30px auto";
+    button.style.padding = "13px 22px";
+    button.style.border = "0";
+    button.style.borderRadius = "12px";
+    button.style.background = "#111827";
+    button.style.color = "white";
+    button.style.fontSize = "16px";
+    button.style.cursor = "pointer";
+
+    button.onclick = () => {
+        loadNews(currentCategory, false);
+    };
+
+    document
+        .querySelector(".container")
+        .appendChild(button);
 }
 
 function renderNews(news) {
@@ -360,7 +420,7 @@ document.querySelectorAll(".category").forEach(button => {
 
         currentCategory = button.dataset.category;
 
-        loadNews(currentCategory);
+        loadNews(currentCategory, true);
     });
 
 });
