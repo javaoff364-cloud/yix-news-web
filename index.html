@@ -1,175 +1,404 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YIX News</title>
-  <meta name="description" content="YIX News — O‘zbekiston va dunyodagi eng muhim yangiliklar.">
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Inter,Arial,sans-serif;background:#f5f6f8;color:#111}
-    header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid #e5e7eb}
-    .nav{max-width:1100px;margin:auto;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .logo{font-size:24px;font-weight:800}
-    .logo span{font-weight:400}
-    nav{display:flex;gap:18px}
-    nav a{text-decoration:none;color:#555;font-size:14px}
-    .hero{max-width:1100px;margin:35px auto 20px;padding:0 20px}
-    .hero h1{font-size:42px;line-height:1.1;margin-bottom:10px}
-    .hero p{color:#666;font-size:17px}
-    .search{max-width:1100px;margin:25px auto;padding:0 20px}
-    .search input{width:100%;padding:15px 18px;border:1px solid #ddd;border-radius:14px;font-size:16px;outline:none}
-    .cats{max-width:1100px;margin:10px auto 25px;padding:0 20px;display:flex;gap:9px;overflow-x:auto}
-    .cats button{white-space:nowrap;border:1px solid #ddd;background:white;padding:10px 15px;border-radius:999px;cursor:pointer}
-    .cats button.active{background:#111;color:white;border-color:#111}
-    main{max-width:1100px;margin:auto;padding:0 20px 50px}
-    .section-title{font-size:22px;margin:20px 0 14px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .card{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:18px;transition:.2s}
-    .card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.07)}
-    .source{font-size:12px;color:#777;margin-bottom:9px}
-    .card h2{font-size:18px;line-height:1.35;margin-bottom:12px}
-    .card p{font-size:14px;color:#666;line-height:1.5}
-    .read{display:inline-block;margin-top:14px;color:#111;text-decoration:none;font-weight:700;font-size:14px}
-    .morning{background:#111;color:white;border-radius:20px;padding:24px;margin:30px 0}
-    .morning p{color:#ccc;margin-top:7px}
-    footer{border-top:1px solid #ddd;padding:25px 20px;text-align:center;color:#777;font-size:13px}
-    @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:34px}}
-    @media(max-width:550px){nav{display:none}.grid{grid-template-columns:1fr}.hero{margin-top:25px}.hero h1{font-size:31px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YIX News</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #111827;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-inner {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.logo span {
+    color: #60a5fa;
+}
+
+.search {
+    margin-top: 15px;
+    width: 100%;
+    padding: 13px 16px;
+    border: 0;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px 15px;
+}
+
+.categories {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+}
+
+.category {
+    border: 0;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+
+.category.active {
+    background: #111827;
+    color: white;
+}
+
+.status {
+    margin: 10px 0 20px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,.07);
+    transition: .2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card-image {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    background: #e5e7eb;
+}
+
+.card-content {
+    padding: 17px;
+}
+
+.source {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.card h2 {
+    font-size: 19px;
+    line-height: 1.35;
+    margin: 8px 0;
+}
+
+.summary {
+    color: #6b7280;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.read {
+    display: inline-block;
+    margin-top: 12px;
+    text-decoration: none;
+    background: #111827;
+    color: white;
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-size: 14px;
+}
+
+.empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: #6b7280;
+}
+
+footer {
+    margin-top: 50px;
+    background: #111827;
+    color: #9ca3af;
+    text-align: center;
+    padding: 25px;
+}
+
+@media (max-width: 600px) {
+    .logo {
+        font-size: 24px;
+    }
+
+    .card-image {
+        height: 180px;
+    }
+}
+</style>
 </head>
+
 <body>
 
 <header>
-  <div class="nav">
-    <div class="logo">YIX <span>News</span></div>
-    <nav>
-      <a href="#">Bosh sahifa</a>
-      <a href="#categories">Kategoriyalar</a>
-      <a href="#morning">YIX Morning</a>
-      <a href="#telegram">Telegram</a>
-    </nav>
-  </div>
+    <div class="header-inner">
+        <div class="logo">📰 <span>YIX</span> News</div>
+
+        <input
+            id="search"
+            class="search"
+            type="search"
+            placeholder="🔎 Yangilik qidirish..."
+        >
+    </div>
 </header>
 
-<section class="hero">
-  <h1>Yangiliklar.<br>Bir joyda.</h1>
-  <p>O‘zbekiston va dunyodagi muhim yangiliklarni tez va qulay o‘qing.</p>
-</section>
+<main class="container">
 
-<section class="search">
-  <input id="search" type="search" placeholder="🔎 Yangilik qidirish...">
-</section>
+    <div class="categories">
+        <button class="category active" data-category="">Barchasi</button>
+        <button class="category" data-category="uzbekistan">🇺🇿 O‘zbekiston</button>
+        <button class="category" data-category="world">🌍 Dunyo</button>
+        <button class="category" data-category="technology">💻 Texnologiya</button>
+        <button class="category" data-category="economy">💰 Iqtisodiyot</button>
+        <button class="category" data-category="science">🔬 Fan</button>
+        <button class="category" data-category="sport">⚽ Sport</button>
+        <button class="category" data-category="cinema">🎬 Kino</button>
+    </div>
 
-<section class="cats" id="categories">
-  <button class="active" data-cat="all">Barchasi</button>
-  <button data-cat="uzbekistan">🇺🇿 O‘zbekiston</button>
-  <button data-cat="world">🌍 Dunyo</button>
-  <button data-cat="technology">💻 Texnologiya</button>
-  <button data-cat="economy">💰 Iqtisodiyot</button>
-  <button data-cat="sport">⚽ Sport</button>
-  <button data-cat="science">🔬 Fan</button>
-</section>
+    <div id="status" class="status">
+        Yangiliklar yuklanmoqda...
+    </div>
 
-<main>
-  <h2 class="section-title">📰 So‘nggi yangiliklar</h2>
-  <div class="grid" id="news"></div>
+    <section id="news" class="news-grid"></section>
 
-  <section class="morning" id="morning">
-    <h2>🌅 YIX Morning</h2>
-    <p>Har kuni ertalab eng muhim voqealarning qisqa dayjesti.</p>
-    <a class="read" style="color:white" href="#">Morning Briefing →</a>
-  </section>
 </main>
 
-<footer id="telegram">
-  © 2026 YIX News · Barcha huquqlar himoyalangan
+<footer>
+    <strong>YIX News</strong><br>
+    Yangiliklar bir joyda.
 </footer>
 
 <script>
-const news = [
-  {
-    category:"uzbekistan",
-    source:"YIX Uzbekistan",
-    title:"O‘zbekiston yangiliklari",
-    text:"O‘zbekistondagi eng so‘nggi muhim voqealar va xabarlar.",
-    link:"#"
-  },
-  {
-    category:"world",
-    source:"YIX World",
-    title:"Dunyodagi so‘nggi voqealar",
-    text:"Dunyoda sodir bo‘layotgan muhim xalqaro yangiliklar.",
-    link:"#"
-  },
-  {
-    category:"technology",
-    source:"YIX Tech",
-    title:"Texnologiya va AI yangiliklari",
-    text:"Sun’iy intellekt, IT va yangi texnologiyalar.",
-    link:"#"
-  },
-  {
-    category:"economy",
-    source:"YIX Economy",
-    title:"Iqtisodiyot va biznes",
-    text:"Bozor, biznes va iqtisodiyotdagi muhim yangiliklar.",
-    link:"#"
-  },
-  {
-    category:"sport",
-    source:"YIX Sport",
-    title:"Sport olamidagi yangiliklar",
-    text:"Sportdagi so‘nggi natijalar va muhim xabarlar.",
-    link:"#"
-  },
-  {
-    category:"science",
-    source:"YIX Science",
-    title:"Fan olamidagi yangi kashfiyotlar",
-    text:"Ilm-fan va tadqiqotlardagi eng yangi xabarlar.",
-    link:"#"
-  }
-];
 
-const container=document.getElementById("news");
-const search=document.getElementById("search");
+const API = "https://yix-news.onrender.com/api/news";
 
-function render(category="all",query=""){
-  const q=query.toLowerCase().trim();
+const newsContainer = document.getElementById("news");
+const statusEl = document.getElementById("status");
+const searchInput = document.getElementById("search");
 
-  const items=news.filter(n=>{
-    const categoryOK=category==="all"||n.category===category;
-    const searchOK=!q||(n.title+n.text+n.source).toLowerCase().includes(q);
-    return categoryOK&&searchOK;
-  });
+let allNews = [];
+let currentCategory = "";
 
-  container.innerHTML=items.length
-    ?items.map(n=>`
-      <article class="card">
-        <div class="source">${n.source}</div>
-        <h2>${n.title}</h2>
-        <p>${n.text}</p>
-        <a class="read" href="${n.link}">Maqolani o‘qish →</a>
-      </article>
-    `).join("")
-    :`<div class="card"><p>Yangilik topilmadi.</p></div>`;
+async function loadNews(category = "") {
+
+    statusEl.textContent = "⏳ Yangiliklar yuklanmoqda...";
+    newsContainer.innerHTML = "";
+
+    try {
+
+        let url = API;
+
+        if (category) {
+            url += "?category=" + encodeURIComponent(category);
+        }
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("API xatosi");
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error("News API ishlamadi");
+        }
+
+        allNews = data.news || [];
+
+        renderNews(allNews);
+
+        statusEl.textContent =
+            `📰 ${allNews.length} ta yangilik`;
+
+    } catch (error) {
+
+        console.error(error);
+
+        statusEl.textContent =
+            "❌ Yangiliklarni yuklashda xatolik";
+
+        newsContainer.innerHTML = `
+            <div class="empty">
+                <h2>Yangiliklar yuklanmadi</h2>
+                <p>Server bilan aloqa vaqtincha mavjud emas.</p>
+            </div>
+        `;
+    }
 }
 
-document.querySelectorAll("[data-cat]").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll("[data-cat]").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    render(btn.dataset.cat,search.value);
-  });
+function renderNews(news) {
+
+    if (!news.length) {
+
+        newsContainer.innerHTML = `
+            <div class="empty">
+                <h2>😔 Yangilik topilmadi</h2>
+                <p>Boshqa kategoriya yoki qidiruv so‘zini sinab ko‘ring.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    newsContainer.innerHTML = news.map(article => {
+
+        const image = article.image
+            ? article.image
+            : "https://placehold.co/800x450?text=YIX+News";
+
+        const title = escapeHtml(article.title || "Yangilik");
+
+        const summary = escapeHtml(
+            article.summary || "Maqolani o‘qish uchun tugmani bosing."
+        );
+
+        const source = escapeHtml(
+            article.source || "YIX News"
+        );
+
+        return `
+            <article class="card">
+
+                <img
+                    class="card-image"
+                    src="${image}"
+                    alt="${title}"
+                    loading="lazy"
+                    onerror="this.src='https://placehold.co/800x450?text=YIX+News'"
+                >
+
+                <div class="card-content">
+
+                    <div class="source">
+                        ${source}
+                    </div>
+
+                    <h2>
+                        ${title}
+                    </h2>
+
+                    <div class="summary">
+                        ${summary}
+                    </div>
+
+                    <a
+                        class="read"
+                        href="${article.link}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Maqolani o‘qish →
+                    </a>
+
+                </div>
+
+            </article>
+        `;
+
+    }).join("");
+}
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+document.querySelectorAll(".category").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document
+            .querySelectorAll(".category")
+            .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+        currentCategory = button.dataset.category;
+
+        loadNews(currentCategory);
+    });
+
 });
 
-search.addEventListener("input",()=>{
-  const active=document.querySelector("[data-cat].active");
-  render(active?.dataset.cat||"all",search.value);
+searchInput.addEventListener("input", () => {
+
+    const query =
+        searchInput.value.toLowerCase().trim();
+
+    if (!query) {
+
+        renderNews(allNews);
+
+        statusEl.textContent =
+            `📰 ${allNews.length} ta yangilik`;
+
+        return;
+    }
+
+    const filtered = allNews.filter(article => {
+
+        const text = `
+            ${article.title || ""}
+            ${article.summary || ""}
+            ${article.source || ""}
+        `.toLowerCase();
+
+        return text.includes(query);
+    });
+
+    renderNews(filtered);
+
+    statusEl.textContent =
+        `🔎 ${filtered.length} ta natija`;
 });
 
-render();
+loadNews();
+
 </script>
 
 </body>
