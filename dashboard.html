@@ -286,7 +286,15 @@ YIX News API'dan foydalanish uchun Telegram orqali kiring.
     Login muvaffaqiyatli bo'lgach, API dashboard ochiladi.
   </p>
 
-  <div id="telegram-login"></div>
+  <button
+    class="login-btn"
+    id="telegram-login-btn"
+    onclick="startTelegramLogin()"
+  >
+    🔐 Telegram orqali kirish
+  </button>
+
+  <p id="login-status" class="info"></p>
 
   <p class="info">
     Har bir account uchun kuniga
@@ -589,27 +597,106 @@ async function copyKey(){
 
 
 /* =========================
-   TELEGRAM LOGIN
+   TELEGRAM BOT LOGIN
 ========================= */
 
-async function telegramLogin(user){
+async function startTelegramLogin(){
 
   setLoginError("");
+
+  const button =
+    document.getElementById("telegram-login-btn");
+
+  const status =
+    document.getElementById("login-status");
+
+  button.disabled = true;
+  button.textContent = "⏳ Login tayyorlanmoqda...";
 
   try{
 
     const response =
       await fetch(
-        API + "/api/auth/telegram",
+        API + "/api/auth/start",
         {
           method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          }
+        }
+      );
 
+    const data =
+      await response.json();
+
+    if(!response.ok || !data.success){
+
+      throw new Error(
+        data.error || "Login boshlanmadi."
+      );
+    }
+
+    status.textContent =
+      "🤖 Telegram ochildi. Botdagi ko'rsatmalarga amal qiling.";
+
+    window.open(
+      data.telegram_url,
+      "_blank"
+    );
+
+    button.textContent =
+      "🤖 Telegram'da tasdiqlashni kuting...";
+
+  }catch(error){
+
+    console.error(error);
+
+    setLoginError(
+      error.message ||
+      "Server bilan bog'lanishda xatolik."
+    );
+
+    button.disabled = false;
+    button.textContent =
+      "🔐 Telegram orqali kirish";
+
+  }
+
+}
+
+
+/* =========================
+   WEB LOGIN COMPLETE
+========================= */
+
+async function completeWebLogin(token){
+
+  if(!token){
+    return;
+  }
+
+  setLoginError("");
+
+  const status =
+    document.getElementById("login-status");
+
+  if(status){
+    status.textContent =
+      "⏳ Telegram tasdiqlashi tekshirilmoqda...";
+  }
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/api/auth/complete",
+        {
+          method:"POST",
           headers:{
             "Content-Type":"application/json"
           },
-
           body:JSON.stringify({
-            auth:user
+            token: token
           })
         }
       );
@@ -619,16 +706,11 @@ async function telegramLogin(user){
 
     if(!response.ok || !data.success){
 
-      setLoginError(
+      throw new Error(
         data.error ||
-        "Telegram login amalga oshmadi."
+        "Telegram login yakunlanmadi."
       );
-
-      return;
     }
-
-
-    /* Session */
 
     if(data.session_token){
 
@@ -638,18 +720,18 @@ async function telegramLogin(user){
       );
     }
 
-
-    /* New API key */
-
     if(data.api_key){
 
       showApiKey(data.api_key);
 
-      document.getElementById("key-message")
-        .textContent =
-          "✅ Yangi API key yaratildi. Uni hozir saqlab oling.";
-    }
+      const message =
+        document.getElementById("key-message");
 
+      if(message){
+        message.textContent =
+          "✅ Yangi API key yaratildi. Uni hozir saqlab oling.";
+      }
+    }
 
     showDashboard();
 
@@ -657,16 +739,22 @@ async function telegramLogin(user){
 
     updateUsage(
       data.user,
-      data.limit
+      data.daily_limit
     );
 
+    history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
 
   }catch(error){
 
     console.error(error);
 
     setLoginError(
-      "Server bilan bog'lanishda xatolik."
+      error.message ||
+      "Login yakunlanmadi."
     );
 
   }
@@ -674,14 +762,29 @@ async function telegramLogin(user){
 }
 
 
-/* Telegram callback */
+/* =========================
+   LOGIN URL CHECK
+========================= */
 
-window.onTelegramAuth =
-  function(user){
+function checkWebLogin(){
 
-    telegramLogin(user);
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
 
-  };
+  const token =
+    params.get("login");
+
+  if(token){
+
+    completeWebLogin(token);
+
+    return true;
+  }
+
+  return false;
+}
 
 
 /* =========================
@@ -867,54 +970,12 @@ function logout(){
 
 
 /* =========================
-   TELEGRAM WIDGET
-========================= */
-
-(function(){
-
-  const container =
-    document.getElementById(
-      "telegram-login"
-    );
-
-  const script =
-    document.createElement("script");
-
-  script.async = true;
-
-  script.src =
-    "https://telegram.org/js/telegram-widget.js?22";
-
-  script.setAttribute(
-    "data-telegram-login",
-    "YIXNewsBot"
-  );
-
-  script.setAttribute(
-    "data-size",
-    "large"
-  );
-
-  script.setAttribute(
-    "data-userpic",
-    "false"
-  );
-
-  script.setAttribute(
-    "data-onauth",
-    "onTelegramAuth(user)"
-  );
-
-  container.appendChild(script);
-
-})();
-
-
-/* =========================
    START
 ========================= */
 
-loadSession();
+if(!checkWebLogin()){
+  loadSession();
+}
 
 </script>
 
