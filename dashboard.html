@@ -945,26 +945,70 @@ async function regenerate(){
    LOGOUT
 ========================= */
 
-function logout(){
+async function logout(){
 
-  localStorage.removeItem(
-    SESSION_KEY
-  );
+  const token =
+    localStorage.getItem(SESSION_KEY);
 
-  localStorage.removeItem(
-    API_KEY
-  );
+  try{
 
-  document.getElementById("key")
-    .textContent =
-      "API key hali ko'rsatilmagan.";
+    if(token){
 
-  document.getElementById("key")
-    .classList.add("hidden");
+      await fetch(
+        API + "/api/session/logout",
+        {
+          method:"POST",
+          headers:{
+            "X-Session-Token": token
+          },
+          cache:"no-store"
+        }
+      );
 
-  showLogin();
+    }
 
-  alert("Siz chiqdingiz.");
+  }catch(error){
+
+    console.error(
+      "Logout revoke error:",
+      error
+    );
+
+  }finally{
+
+    localStorage.removeItem(
+      SESSION_KEY
+    );
+
+    localStorage.removeItem(
+      API_KEY
+    );
+
+    const key =
+      document.getElementById("key");
+
+    if(key){
+
+      key.textContent =
+        "API key hali ko'rsatilmagan.";
+
+      key.classList.add("hidden");
+
+    }
+
+    showLogin();
+
+    const status =
+      document.getElementById("login-status");
+
+    if(status){
+
+      status.textContent =
+        "✅ Siz xavfsiz chiqdingiz.";
+
+    }
+
+  }
 
 }
 
