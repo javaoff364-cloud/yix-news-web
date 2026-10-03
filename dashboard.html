@@ -3,207 +3,1844 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>YIX News API Dashboard</title>
+
 <style>
-body{margin:0;background:#080b12;color:#fff;font-family:system-ui;padding:25px}
-main{max-width:700px;margin:auto}
-h1{font-size:40px}
-.card{background:#111722;border:1px solid #202938;border-radius:20px;padding:25px;margin-top:20px}
-button{background:#2563eb;color:white;border:0;padding:13px 20px;border-radius:12px;font-weight:800;cursor:pointer}
-.key{background:#080b12;border:1px solid #303b4d;padding:15px;border-radius:12px;word-break:break-all}
-a{color:#60a5fa}
-small{color:#9ca3af}
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#080b12;
+  --card:#111722;
+  --border:#202938;
+  --text:#fff;
+  --muted:#9ca3af;
+  --blue:#2563eb;
+  --blue2:#3b82f6;
+  --danger:#ef4444;
+}
+
+body.light{
+  --bg:#f4f7fb;
+  --card:#fff;
+  --border:#dbe2ea;
+  --text:#111827;
+  --muted:#667085;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+  transition:.2s;
+}
+
+header{
+  border-bottom:1px solid var(--border);
+  padding:16px 20px;
+  background:var(--card);
+}
+
+.nav{
+  max-width:900px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.logo{
+  font-weight:900;
+  font-size:21px;
+  letter-spacing:-.5px;
+}
+
+.nav-right{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.nav a{
+  color:var(--text);
+  text-decoration:none;
+  font-weight:700;
+}
+
+.theme{
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  padding:9px 12px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+main{
+  max-width:760px;
+  margin:45px auto;
+  padding:0 18px 50px;
+}
+
+.back{
+  color:#60a5fa;
+  text-decoration:none;
+  font-weight:700;
+}
+
+h1{
+  font-size:42px;
+  margin:22px 0 8px;
+  letter-spacing:-1.5px;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin-bottom:25px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:25px;
+  margin-top:18px;
+  box-shadow:0 12px 40px rgba(0,0,0,.12);
+}
+
+.card h2{
+  margin-top:0;
+}
+
+.login-box{
+  text-align:center;
+  padding:30px 15px;
+}
+
+#telegram-login{
+  margin:25px 0;
+  min-height:50px;
+}
+
+.key{
+  background:var(--bg);
+  border:1px solid var(--border);
+  padding:16px;
+  border-radius:13px;
+  word-break:break-all;
+  font-family:monospace;
+  line-height:1.5;
+  margin-top:10px;
+}
+
+.key.hidden{
+  color:var(--muted);
+}
+
+button{
+  border:0;
+  background:var(--blue);
+  color:white;
+  padding:12px 17px;
+  border-radius:12px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:hover{
+  background:var(--blue2);
+}
+
+button.secondary{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+button.danger{
+  background:var(--danger);
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:15px;
+}
+
+.usage-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+  font-weight:800;
+}
+
+.progress{
+  height:12px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  background:var(--blue);
+  transition:.3s;
+}
+
+.info{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+}
+
+.success{
+  color:#22c55e;
+  font-weight:700;
+}
+
+.error{
+  color:#ef4444;
+  font-weight:700;
+}
+
+.hidden{
+  display:none!important;
+}
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  margin-top:40px;
+}
+
+@media(max-width:600px){
+  main{
+    margin-top:25px;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  .card{
+    padding:20px;
+  }
+
+  .nav{
+    flex-wrap:wrap;
+  }
+}
 </style>
 </head>
+
 <body>
+
+<header>
+  <div class="nav">
+
+    <div class="logo">
+      ⚡ YIX NEWS
+    </div>
+
+    <div class="nav-right">
+      <a href="docs.html">API Docs</a>
+      <button class="theme" onclick="toggleTheme()" id="themeBtn">
+        🌙
+      </button>
+    </div>
+
+  </div>
+</header>
 
 <main>
 
-<p><a href="index.html">← YIX News</a></p>
+<a class="back" href="index.html">
+ YIX News
+</a>
 
 <h1>API Dashboard</h1>
 
-<div class="card" id="login">
-<h2>🔐 Telegram orqali kirish</h2>
-
-<p>
-API'dan foydalanish uchun Telegram account orqali
-autentifikatsiyadan o'ting.
-</p>
-
-<div id="telegram-login"></div>
-
-<p>
-<small>
-Login orqali sizga shaxsiy YIX News API key beriladi.
-</small>
-</p>
+<div class="subtitle">
+YIX News API'dan foydalanish uchun Telegram orqali kiring.
 </div>
 
-<div class="card" id="dashboard" style="display:none">
 
-<h2>👤 Account</h2>
+<!-- LOGIN -->
 
-<p id="user"></p>
+<section class="card login-box" id="login">
 
-<h2>🔑 API Key</h2>
+  <h2>🔐 Telegram orqali kirish</h2>
 
-<div class="key" id="key">
-API key shu yerda ko‘rinadi
-</div>
+  <p class="info">
+    Telegram account orqali xavfsiz autentifikatsiyadan o'ting.
+    Login muvaffaqiyatli bo'lgach, API dashboard ochiladi.
+  </p>
 
-<p><small>
-API keyni hech kimga bermang.
-</small></p>
+  <div id="telegram-login"></div>
 
-<h2>📊 Usage</h2>
+  <p class="info">
+    Har bir account uchun kuniga
+    <strong>1000 ta API request</strong>.
+  </p>
 
-<p id="usage"></p>
+  <p id="login-error" class="error"></p>
 
-<button onclick="regenerate()">
-</button>
+</section>
 
-</div>
+
+<!-- DASHBOARD -->
+
+<section class="hidden" id="dashboard">
+
+  <div class="card">
+
+    <h2>👤 Account</h2>
+
+    <p id="user"></p>
+
+    <p class="info">
+      Telegram orqali autentifikatsiyadan o'tgansiz.
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>🔑 API Key</h2>
+
+    <p class="info">
+      API key boshqa dasturlar YIX News API'ga murojaat qilishi
+      uchun ishlatiladi.
+    </p>
+
+    <div class="key hidden" id="key">
+      API key hali ko'rsatilmagan.
+    </div>
+
+    <div class="actions">
+
+      <button onclick="copyKey()">
+        📋 Copy API Key
+      </button>
+
+      <button
+        class="secondary"
+        onclick="regenerate()">
+        🔄 Regenerate
+      </button>
+
+    </div>
+
+    <p id="key-message" class="info"></p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📊 API Usage</h2>
+
+    <div class="usage-row">
+      <span>Bugungi foydalanish</span>
+      <span id="usage">0 / 1000</span>
+    </div>
+
+    <div class="progress">
+      <div
+        class="progress-bar"
+        id="progress">
+      </div>
+    </div>
+
+    <p class="info" id="remaining">
+      1000 ta request qoldi.
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📚 API</h2>
+
+    <p class="info">
+      API endpointlar, parametrlar va misollarni
+      hujjatlar sahifasidan ko'rishingiz mumkin.
+    </p>
+
+    <div class="actions">
+
+      <a href="docs.html">
+        <button>
+          📖 API Documentation
+        </button>
+      </a>
+
+      <button
+        class="secondary"
+        onclick="logout()">
+        🚪 Logout
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+  YIX News API • Telegram authenticated
+</footer>
 
 </main>
 
+
 <script>
-const API="https://yix-news.onrender.com";
 
-function showDashboard(data){
+const API = "https://yix-news.onrender.com";
 
- document.getElementById("login").style.display="none";
- document.getElementById("dashboard").style.display="block";
+const SESSION_KEY = "yix_session_token";
+const API_KEY = "yix_api_key";
 
- if(data.api_key){
-   document.getElementById("key").textContent=data.api_key;
- }
 
- if(data.user){
+/* =========================
+   THEME
+========================= */
 
-   const u=data.user;
+function toggleTheme(){
 
-   document.getElementById("user").textContent=
-     `${u.first_name || ""} ${u.last_name || ""} @${u.username || "user"}`;
+  document.body.classList.toggle("light");
 
-   const used=u.requests_today||0;
-   const limit=data.limit||1000;
+  const light =
+    document.body.classList.contains("light");
 
-   document.getElementById("usage").textContent=
-     `${used} / ${limit} requests today`;
- }
+  localStorage.setItem(
+    "yix_theme",
+    light ? "light" : "dark"
+  );
+
+  document.getElementById("themeBtn").textContent =
+    light ? "☀️" : "🌙";
 }
+
+
+(function(){
+
+  const theme =
+    localStorage.getItem("yix_theme");
+
+  if(theme === "light"){
+    document.body.classList.add("light");
+
+    document.getElementById("themeBtn").textContent =
+      "☀️";
+  }
+
+})();
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function setLoginError(message){
+
+  document.getElementById("login-error")
+    .textContent = message || "";
+
+}
+
+
+function showDashboard(){
+
+  document.getElementById("login")
+    .classList.add("hidden");
+
+  document.getElementById("dashboard")
+    .classList.remove("hidden");
+
+}
+
+
+function showLogin(){
+
+  document.getElementById("login")
+    .classList.remove("hidden");
+
+  document.getElementById("dashboard")
+    .classList.add("hidden");
+
+}
+
+
+function updateUser(user){
+
+  if(!user) return;
+
+  const name =
+    [
+      user.first_name,
+      user.last_name
+    ]
+    .filter(Boolean)
+    .join(" ");
+
+  const username =
+    user.username
+      ? "@" + user.username
+      : "Telegram user";
+
+  document.getElementById("user")
+    .textContent =
+      `${name || "Telegram user"} • ${username}`;
+}
+
+
+function updateUsage(user, limit){
+
+  const used =
+    Number(user?.requests_today || 0);
+
+  const max =
+    Number(limit || 1000);
+
+  const remaining =
+    Math.max(max - used, 0);
+
+  const percentage =
+    Math.min((used / max) * 100, 100);
+
+  document.getElementById("usage")
+    .textContent =
+      `${used} / ${max}`;
+
+  document.getElementById("remaining")
+    .textContent =
+      `${remaining} ta request qoldi.`;
+
+  document.getElementById("progress")
+    .style.width =
+      `${percentage}%`;
+}
+
+
+function showApiKey(key){
+
+  if(!key) return;
+
+  const element =
+    document.getElementById("key");
+
+  element.textContent = key;
+
+  element.classList.remove("hidden");
+
+  localStorage.setItem(
+    API_KEY,
+    key
+  );
+
+  document.getElementById("key-message")
+    .textContent =
+      "⚠️ API keyni xavfsiz joyda saqlang.";
+}
+
+
+async function copyKey(){
+
+  const key =
+    localStorage.getItem(API_KEY);
+
+  if(!key){
+
+    alert(
+      "API key hozircha ko'rsatilmagan. Regenerate qiling."
+    );
+
+    return;
+  }
+
+  try{
+
+    await navigator.clipboard.writeText(key);
+
+    alert("✅ API key nusxalandi");
+
+  }catch(e){
+
+    alert(
+      "API keyni qo'lda nusxalang."
+    );
+
+  }
+}
+
+
+/* =========================
+   TELEGRAM LOGIN
+========================= */
 
 async function telegramLogin(user){
 
- const res=await fetch(
-   API+"/api/auth/telegram",
-   {
-     method:"POST",
-     headers:{"Content-Type":"application/json"},
-     body:JSON.stringify({auth:user})
-   }
- );
+  setLoginError("");
 
- const data=await res.json();
+  try{
 
- if(!data.success){
-   alert(data.error||"Login xatosi");
-   return;
- }
+    const response =
+      await fetch(
+        API + "/api/auth/telegram",
+        {
+          method:"POST",
 
- if(data.api_key){
-   showDashboard(data);
+          headers:{
+            "Content-Type":"application/json"
+          },
 
-   localStorage.setItem(
-     "yix_api_key",
-     data.api_key
-   );
- }else{
-   alert(data.message);
- }
+          body:JSON.stringify({
+            auth:user
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(!response.ok || !data.success){
+
+      setLoginError(
+        data.error ||
+        "Telegram login amalga oshmadi."
+      );
+
+      return;
+    }
+
+
+    /* Session */
+
+    if(data.session_token){
+
+      localStorage.setItem(
+        SESSION_KEY,
+        data.session_token
+      );
+    }
+
+
+    /* New API key */
+
+    if(data.api_key){
+
+      showApiKey(data.api_key);
+
+      document.getElementById("key-message")
+        .textContent =
+          "✅ Yangi API key yaratildi. Uni hozir saqlab oling.";
+    }
+
+
+    showDashboard();
+
+    updateUser(data.user);
+
+    updateUsage(
+      data.user,
+      data.limit
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    setLoginError(
+      "Server bilan bog'lanishda xatolik."
+    );
+
+  }
+
 }
 
-function regenerate(){
 
- const key=localStorage.getItem("yix_api_key");
+/* Telegram callback */
 
- if(!key)return;
+window.onTelegramAuth =
+  function(user){
 
- fetch(
-   API+"/api/key/regenerate",
-   {
-     method:"POST",
-     headers:{
-       Authorization:"Bearer "+key
-     }
-   }
- )
- .then(r=>r.json())
- .then(data=>{
+    telegramLogin(user);
 
-   if(data.api_key){
+  };
 
-     document.getElementById("key").textContent=
-       data.api_key;
 
-     localStorage.setItem(
-       "yix_api_key",
-       data.api_key
-     );
+/* =========================
+   SESSION
+========================= */
 
-     alert("✅ Yangi API key yaratildi");
-   }
- });
+async function loadSession(){
+
+  const token =
+    localStorage.getItem(SESSION_KEY);
+
+  if(!token){
+
+    showLogin();
+
+    return;
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/api/session/me",
+        {
+          headers:{
+            "X-Session-Token":token
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok || !data.success){
+
+      localStorage.removeItem(
+        SESSION_KEY
+      );
+
+      showLogin();
+
+      return;
+    }
+
+
+    showDashboard();
+
+    updateUser(data.user);
+
+    updateUsage(
+      data.user,
+      data.daily_limit
+    );
+
+
+    if(!localStorage.getItem(API_KEY)){
+
+      document.getElementById("key")
+        .textContent =
+          "API key saqlangan emas. Regenerate qiling.";
+
+      document.getElementById("key")
+        .classList.add("hidden");
+
+    }
+
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
 }
 
-const script=document.createElement("script");
 
-script.src=
- "https://telegram.org/js/telegram-widget.js?22";
+/* =========================
+   REGENERATE API KEY
+========================= */
 
-script.setAttribute("data-telegram-login","YIXNewsBot");
-script.setAttribute("data-size","large");
-script.setAttribute("data-userpic","false");
+async function regenerate(){
 
-script.onload=()=>{
+  const token =
+    localStorage.getItem(SESSION_KEY);
 
-};
+  if(!token){
 
-document.getElementById("telegram-login")
- .appendChild(script);
+    alert("Avval Telegram orqali kiring.");
 
-/*
- Telegram widget callback:
- Telegram Login Widget uchun callback URL
- sifatida ushbu sahifani ishlatamiz.
-*/
-window.onTelegramAuth=function(user){
- telegramLogin(user);
-};
+    return;
+  }
 
-const old=localStorage.getItem("yix_api_key");
 
-if(old){
+  const confirmed =
+    confirm(
+      "Eski API key darhol ishlamaydi. Yangi API key yaratilsinmi?"
+    );
 
- fetch(
-   API+"/api/me",
-   {
-     headers:{
-       Authorization:"Bearer "+old
-     }
-   }
- )
- .then(r=>r.json())
- .then(data=>{
-   if(data.success){
-     showDashboard({
-       user:data.user,
-       limit:data.daily_limit
-     });
-   }
- });
+  if(!confirmed) return;
+
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/api/session/regenerate",
+        {
+          method:"POST",
+
+          headers:{
+            "X-Session-Token":token
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok || !data.success){
+
+      alert(
+        data.error ||
+        "API key yaratilmadi."
+      );
+
+      return;
+    }
+
+
+    showApiKey(data.api_key);
+
+    document.getElementById("key-message")
+      .textContent =
+        "✅ Yangi API key yaratildi. Eski key bekor qilindi.";
+
+    alert(
+      "✅ Yangi API key yaratildi."
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Server bilan bog'lanishda xatolik."
+    );
+
+  }
+
 }
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+
+  localStorage.removeItem(
+    SESSION_KEY
+  );
+
+  localStorage.removeItem(
+    API_KEY
+  );
+
+  document.getElementById("key")
+    .textContent =
+      "API key hali ko'rsatilmagan.";
+
+  document.getElementById("key")
+    .classList.add("hidden");
+
+  showLogin();
+
+  alert("Siz chiqdingiz.");
+
+}
+
+
+/* =========================
+   TELEGRAM WIDGET
+========================= */
+
+(function(){
+
+  const container =
+    document.getElementById(
+      "telegram-login"
+    );
+
+  const script =
+    document.createElement("script");
+
+  script.async = true;
+
+  script.src =
+    "https://telegram.org/js/telegram-widget.js?22";
+
+  script.setAttribute(
+    "data-telegram-login",
+    "YIXNewsBot"
+  );
+
+  script.setAttribute(
+    "data-size",
+    "large"
+  );
+
+  script.setAttribute(
+    "data-userpic",
+    "false"
+  );
+
+  script.setAttribute(
+    "data-onauth",
+    "onTelegramAuth(user)"
+  );
+
+  container.appendChild(script);
+
+})();
+
+
+/* =========================
+   START
+========================= */
+
+loadSession();
+
+</script>
+
+</body>
+</html>
+EOFcd ~/yix-news-web
+
+cat > dashboard.html <<'EOF'
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>YIX News API Dashboard</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#080b12;
+  --card:#111722;
+  --border:#202938;
+  --text:#fff;
+  --muted:#9ca3af;
+  --blue:#2563eb;
+  --blue2:#3b82f6;
+  --danger:#ef4444;
+}
+
+body.light{
+  --bg:#f4f7fb;
+  --card:#fff;
+  --border:#dbe2ea;
+  --text:#111827;
+  --muted:#667085;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+  transition:.2s;
+}
+
+header{
+  border-bottom:1px solid var(--border);
+  padding:16px 20px;
+  background:var(--card);
+}
+
+.nav{
+  max-width:900px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.logo{
+  font-weight:900;
+  font-size:21px;
+  letter-spacing:-.5px;
+}
+
+.nav-right{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.nav a{
+  color:var(--text);
+  text-decoration:none;
+  font-weight:700;
+}
+
+.theme{
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  padding:9px 12px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+main{
+  max-width:760px;
+  margin:45px auto;
+  padding:0 18px 50px;
+}
+
+.back{
+  color:#60a5fa;
+  text-decoration:none;
+  font-weight:700;
+}
+
+h1{
+  font-size:42px;
+  margin:22px 0 8px;
+  letter-spacing:-1.5px;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin-bottom:25px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:25px;
+  margin-top:18px;
+  box-shadow:0 12px 40px rgba(0,0,0,.12);
+}
+
+.card h2{
+  margin-top:0;
+}
+
+.login-box{
+  text-align:center;
+  padding:30px 15px;
+}
+
+#telegram-login{
+  margin:25px 0;
+  min-height:50px;
+}
+
+.key{
+  background:var(--bg);
+  border:1px solid var(--border);
+  padding:16px;
+  border-radius:13px;
+  word-break:break-all;
+  font-family:monospace;
+  line-height:1.5;
+  margin-top:10px;
+}
+
+.key.hidden{
+  color:var(--muted);
+}
+
+button{
+  border:0;
+  background:var(--blue);
+  color:white;
+  padding:12px 17px;
+  border-radius:12px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:hover{
+  background:var(--blue2);
+}
+
+button.secondary{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+button.danger{
+  background:var(--danger);
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:15px;
+}
+
+.usage-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+  font-weight:800;
+}
+
+.progress{
+  height:12px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  background:var(--blue);
+  transition:.3s;
+}
+
+.info{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+}
+
+.success{
+  color:#22c55e;
+  font-weight:700;
+}
+
+.error{
+  color:#ef4444;
+  font-weight:700;
+}
+
+.hidden{
+  display:none!important;
+}
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  margin-top:40px;
+}
+
+@media(max-width:600px){
+  main{
+    margin-top:25px;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  .card{
+    padding:20px;
+  }
+
+  .nav{
+    flex-wrap:wrap;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+
+    <div class="logo">
+      ⚡ YIX NEWS
+    </div>
+
+    <div class="nav-right">
+      <a href="docs.html">API Docs</a>
+      <button class="theme" onclick="toggleTheme()" id="themeBtn">
+        🌙
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<main>
+
+<a class="back" href="index.html">
+ YIX News
+</a>
+
+<h1>API Dashboard</h1>
+
+<div class="subtitle">
+YIX News API'dan foydalanish uchun Telegram orqali kiring.
+</div>
+
+
+<!-- LOGIN -->
+
+<section class="card login-box" id="login">
+
+  <h2>🔐 Telegram orqali kirish</h2>
+
+  <p class="info">
+    Telegram account orqali xavfsiz autentifikatsiyadan o'ting.
+    Login muvaffaqiyatli bo'lgach, API dashboard ochiladi.
+  </p>
+
+  <div id="telegram-login"></div>
+
+  <p class="info">
+    Har bir account uchun kuniga
+    <strong>1000 ta API request</strong>.
+  </p>
+
+  <p id="login-error" class="error"></p>
+
+</section>
+
+
+<!-- DASHBOARD -->
+
+<section class="hidden" id="dashboard">
+
+  <div class="card">
+
+    <h2>👤 Account</h2>
+
+    <p id="user"></p>
+
+    <p class="info">
+      Telegram orqali autentifikatsiyadan o'tgansiz.
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>🔑 API Key</h2>
+
+    <p class="info">
+      API key boshqa dasturlar YIX News API'ga murojaat qilishi
+      uchun ishlatiladi.
+    </p>
+
+    <div class="key hidden" id="key">
+      API key hali ko'rsatilmagan.
+    </div>
+
+    <div class="actions">
+
+      <button onclick="copyKey()">
+        📋 Copy API Key
+      </button>
+
+      <button
+        class="secondary"
+        onclick="regenerate()">
+        🔄 Regenerate
+      </button>
+
+    </div>
+
+    <p id="key-message" class="info"></p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📊 API Usage</h2>
+
+    <div class="usage-row">
+      <span>Bugungi foydalanish</span>
+      <span id="usage">0 / 1000</span>
+    </div>
+
+    <div class="progress">
+      <div
+        class="progress-bar"
+        id="progress">
+      </div>
+    </div>
+
+    <p class="info" id="remaining">
+      1000 ta request qoldi.
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📚 API</h2>
+
+    <p class="info">
+      API endpointlar, parametrlar va misollarni
+      hujjatlar sahifasidan ko'rishingiz mumkin.
+    </p>
+
+    <div class="actions">
+
+      <a href="docs.html">
+        <button>
+          📖 API Documentation
+        </button>
+      </a>
+
+      <button
+        class="secondary"
+        onclick="logout()">
+        🚪 Logout
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+  YIX News API • Telegram authenticated
+</footer>
+
+</main>
+
+
+<script>
+
+const API = "https://yix-news.onrender.com";
+
+const SESSION_KEY = "yix_session_token";
+const API_KEY = "yix_api_key";
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+  document.body.classList.toggle("light");
+
+  const light =
+    document.body.classList.contains("light");
+
+  localStorage.setItem(
+    "yix_theme",
+    light ? "light" : "dark"
+  );
+
+  document.getElementById("themeBtn").textContent =
+    light ? "☀️" : "🌙";
+}
+
+
+(function(){
+
+  const theme =
+    localStorage.getItem("yix_theme");
+
+  if(theme === "light"){
+    document.body.classList.add("light");
+
+    document.getElementById("themeBtn").textContent =
+      "☀️";
+  }
+
+})();
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function setLoginError(message){
+
+  document.getElementById("login-error")
+    .textContent = message || "";
+
+}
+
+
+function showDashboard(){
+
+  document.getElementById("login")
+    .classList.add("hidden");
+
+  document.getElementById("dashboard")
+    .classList.remove("hidden");
+
+}
+
+
+function showLogin(){
+
+  document.getElementById("login")
+    .classList.remove("hidden");
+
+  document.getElementById("dashboard")
+    .classList.add("hidden");
+
+}
+
+
+function updateUser(user){
+
+  if(!user) return;
+
+  const name =
+    [
+      user.first_name,
+      user.last_name
+    ]
+    .filter(Boolean)
+    .join(" ");
+
+  const username =
+    user.username
+      ? "@" + user.username
+      : "Telegram user";
+
+  document.getElementById("user")
+    .textContent =
+      `${name || "Telegram user"} • ${username}`;
+}
+
+
+function updateUsage(user, limit){
+
+  const used =
+    Number(user?.requests_today || 0);
+
+  const max =
+    Number(limit || 1000);
+
+  const remaining =
+    Math.max(max - used, 0);
+
+  const percentage =
+    Math.min((used / max) * 100, 100);
+
+  document.getElementById("usage")
+    .textContent =
+      `${used} / ${max}`;
+
+  document.getElementById("remaining")
+    .textContent =
+      `${remaining} ta request qoldi.`;
+
+  document.getElementById("progress")
+    .style.width =
+      `${percentage}%`;
+}
+
+
+function showApiKey(key){
+
+  if(!key) return;
+
+  const element =
+    document.getElementById("key");
+
+  element.textContent = key;
+
+  element.classList.remove("hidden");
+
+  localStorage.setItem(
+    API_KEY,
+    key
+  );
+
+  document.getElementById("key-message")
+    .textContent =
+      "⚠️ API keyni xavfsiz joyda saqlang.";
+}
+
+
+async function copyKey(){
+
+  const key =
+    localStorage.getItem(API_KEY);
+
+  if(!key){
+
+    alert(
+      "API key hozircha ko'rsatilmagan. Regenerate qiling."
+    );
+
+    return;
+  }
+
+  try{
+
+    await navigator.clipboard.writeText(key);
+
+    alert("✅ API key nusxalandi");
+
+  }catch(e){
+
+    alert(
+      "API keyni qo'lda nusxalang."
+    );
+
+  }
+}
+
+
+/* =========================
+   TELEGRAM LOGIN
+========================= */
+
+async function telegramLogin(user){
+
+  setLoginError("");
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/api/auth/telegram",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":"application/json"
+          },
+
+          body:JSON.stringify({
+            auth:user
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(!response.ok || !data.success){
+
+      setLoginError(
+        data.error ||
+        "Telegram login amalga oshmadi."
+      );
+
+      return;
+    }
+
+
+    /* Session */
+
+    if(data.session_token){
+
+      localStorage.setItem(
+        SESSION_KEY,
+        data.session_token
+      );
+    }
+
+
+    /* New API key */
+
+    if(data.api_key){
+
+      showApiKey(data.api_key);
+
+      document.getElementById("key-message")
+        .textContent =
+          "✅ Yangi API key yaratildi. Uni hozir saqlab oling.";
+    }
+
+
+    showDashboard();
+
+    updateUser(data.user);
+
+    updateUsage(
+      data.user,
+      data.limit
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    setLoginError(
+      "Server bilan bog'lanishda xatolik."
+    );
+
+  }
+
+}
+
+
+/* Telegram callback */
+
+window.onTelegramAuth =
+  function(user){
+
+    telegramLogin(user);
+
+  };
+
+
+/* =========================
+   SESSION
+========================= */
+
+async function loadSession(){
+
+  const token =
+    localStorage.getItem(SESSION_KEY);
+
+  if(!token){
+
+    showLogin();
+
+    return;
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/api/session/me",
+        {
+          headers:{
+            "X-Session-Token":token
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok || !data.success){
+
+      localStorage.removeItem(
+        SESSION_KEY
+      );
+
+      showLogin();
+
+      return;
+    }
+
+
+    showDashboard();
+
+    updateUser(data.user);
+
+    updateUsage(
+      data.user,
+      data.daily_limit
+    );
+
+
+    if(!localStorage.getItem(API_KEY)){
+
+      document.getElementById("key")
+        .textContent =
+          "API key saqlangan emas. Regenerate qiling.";
+
+      document.getElementById("key")
+        .classList.add("hidden");
+
+    }
+
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================
+   REGENERATE API KEY
+========================= */
+
+async function regenerate(){
+
+  const token =
+    localStorage.getItem(SESSION_KEY);
+
+  if(!token){
+
+    alert("Avval Telegram orqali kiring.");
+
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      "Eski API key darhol ishlamaydi. Yangi API key yaratilsinmi?"
+    );
+
+  if(!confirmed) return;
+
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/api/session/regenerate",
+        {
+          method:"POST",
+
+          headers:{
+            "X-Session-Token":token
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok || !data.success){
+
+      alert(
+        data.error ||
+        "API key yaratilmadi."
+      );
+
+      return;
+    }
+
+
+    showApiKey(data.api_key);
+
+    document.getElementById("key-message")
+      .textContent =
+        "✅ Yangi API key yaratildi. Eski key bekor qilindi.";
+
+    alert(
+      "✅ Yangi API key yaratildi."
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Server bilan bog'lanishda xatolik."
+    );
+
+  }
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+
+  localStorage.removeItem(
+    SESSION_KEY
+  );
+
+  localStorage.removeItem(
+    API_KEY
+  );
+
+  document.getElementById("key")
+    .textContent =
+      "API key hali ko'rsatilmagan.";
+
+  document.getElementById("key")
+    .classList.add("hidden");
+
+  showLogin();
+
+  alert("Siz chiqdingiz.");
+
+}
+
+
+/* =========================
+   TELEGRAM WIDGET
+========================= */
+
+(function(){
+
+  const container =
+    document.getElementById(
+      "telegram-login"
+    );
+
+  const script =
+    document.createElement("script");
+
+  script.async = true;
+
+  script.src =
+    "https://telegram.org/js/telegram-widget.js?22";
+
+  script.setAttribute(
+    "data-telegram-login",
+    "YIXNewsBot"
+  );
+
+  script.setAttribute(
+    "data-size",
+    "large"
+  );
+
+  script.setAttribute(
+    "data-userpic",
+    "false"
+  );
+
+  script.setAttribute(
+    "data-onauth",
+    "onTelegramAuth(user)"
+  );
+
+  container.appendChild(script);
+
+})();
+
+
+/* =========================
+   START
+========================= */
+
+loadSession();
+
 </script>
 
 </body>
