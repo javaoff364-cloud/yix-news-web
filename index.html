@@ -320,7 +320,7 @@ function render(){
      <div class="source">${a.source || "YIX News"}</div>
      <div class="title">${escapeHtml(a.title || "")}</div>
      <div class="summary">${escapeHtml(a.summary || "")}</div>
-     ${a.url ? `<a class="read" href="${a.url}" target="_blank" rel="noopener">Maqolani o‘qish →</a>` : ""}
+     ${(a.link || a.url) ? `<a class="read" href="${a.link || a.url}" target="_blank" rel="noopener noreferrer">Maqolani o‘qish →</a>` : ""}
    </div>
  </article>
  `).join("");
@@ -357,10 +357,11 @@ async function load(reset=true){
      url+=`&category=${encodeURIComponent(category)}`;
    }
 
-   const res=await fetch(url);
+   const res=await fetch(url, {cache:"no-store"});
+   if(!res.ok) throw new Error(`HTTP ${res.status}`);
    const data=await res.json();
 
-   if(!data.success)throw new Error();
+   if(!data.success)throw new Error(data.error || "API error");
 
    const incoming=data.news||[];
 
