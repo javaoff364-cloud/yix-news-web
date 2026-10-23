@@ -170,7 +170,9 @@ button,.navlink{
 }
 
 .source{
+ display:inline-block;
  color:var(--accent);
+ text-decoration:none;
  font-size:13px;
  font-weight:800;
 }
@@ -297,6 +299,10 @@ if(localStorage.getItem("yix-theme")==="dark"){
  document.documentElement.dataset.theme="dark";
 }
 
+function safeUrl(value){
+ try{const u=new URL(value);return ["http:","https:"].includes(u.protocol)?u.href:"";}catch{return "";}
+}
+
 function render(){
  const q=search.value.toLowerCase().trim();
 
@@ -310,20 +316,20 @@ function render(){
    return text.includes(q);
  });
 
- news.innerHTML=filtered.map(a=>`
+ news.innerHTML=filtered.map(a=>{ const href=safeUrl(a.link||a.url); const image=safeUrl(a.image); return `
  <article class="card">
    <img
-    src="${a.image || 'https://placehold.co/800x500?text=YIX+NEWS'}"
+    src="${image || 'https://placehold.co/800x500?text=YIX+NEWS'}"
     onerror="this.src='https://placehold.co/800x500?text=YIX+NEWS'"
    >
    <div class="content">
-     <div class="source">${a.source || "YIX News"}</div>
+     ${href ? `<a class="source" href="${href}" target="_blank" rel="noopener noreferrer">${escapeHtml(a.source || "YIX News")} ↗</a>` : `<div class="source">${escapeHtml(a.source || "YIX News")}</div>`}
      <div class="title">${escapeHtml(a.title || "")}</div>
      <div class="summary">${escapeHtml(a.summary || "")}</div>
-     ${(a.link || a.url) ? `<a class="read" href="${a.link || a.url}" target="_blank" rel="noopener noreferrer">Maqolani o‘qish →</a>` : ""}
+     ${href ? `<a class="read" href="${href}" target="_blank" rel="noopener noreferrer">Maqolani o‘qish →</a>` : ""}
    </div>
  </article>
- `).join("");
+ `}).join("");
 
  status.textContent=`📰 ${filtered.length} ta ko‘rsatilmoqda · Jami yuklangan: ${articles.length}`;
 }
