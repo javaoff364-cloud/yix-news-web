@@ -98,6 +98,12 @@ button,.navlink{
  max-width:650px;
 }
 
+.preferences{max-width:1200px;margin:auto;padding:0 20px 18px;display:flex;gap:10px;flex-wrap:wrap}
+.preferences select{min-width:190px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font:inherit}
+.skeleton{background:linear-gradient(90deg,var(--border) 25%,rgba(150,150,150,.18) 50%,var(--border) 75%);background-size:200% 100%;animation:yix-shimmer 1.2s infinite}
+@keyframes yix-shimmer{to{background-position:-200% 0}}
+.card img{opacity:0;transition:opacity .25s;background-color:var(--border);background-image:linear-gradient(90deg,var(--border),rgba(150,150,150,.22),var(--border));background-size:200% 100%;animation:yix-shimmer 1.2s infinite}
+.card img.loaded{opacity:1;animation:none;background:var(--border)}
 .search{
  max-width:1200px;
  margin:auto;
@@ -250,6 +256,10 @@ tez, qulay va zamonaviy interfeysda kuzating.
 </p>
 </section>
 
+<div class="preferences">
+<select id="countrySelect" aria-label="Davlat"><option value="uzbekistan">🇺🇿 O‘zbekiston</option><option value="usa">🇺🇸 AQSH</option><option value="uk">🇬🇧 Buyuk Britaniya</option><option value="russia">🇷🇺 Rossiya</option><option value="turkey">🇹🇷 Turkiya</option><option value="india">🇮🇳 Hindiston</option><option value="international">🌍 Xalqaro</option></select>
+<select id="languageSelect" aria-label="Til"></select>
+</div>
 <div class="search">
 <input id="search" placeholder="🔎 Yangilik qidirish...">
 </div>
@@ -280,7 +290,10 @@ tez, qulay va zamonaviy interfeysda kuzating.
 <script>
 const API="https://yix-news.onrender.com/api/site-news";
 const PAGE_SIZE=50;
-
+const CACHE_KEY="yix-news-cache-v2";
+const LANGUAGE_OPTIONS={uzbekistan:[["uz","O‘zbekcha"],["ru","Русский"]],usa:[["en","English"]],uk:[["en","English"]],russia:[["ru","Русский"]],turkey:[["tr","Türkçe"],["en","English"]],india:[["en","English"]],international:[["en","English"]]};
+let country=localStorage.getItem("yix-country")||"uzbekistan";
+let language=localStorage.getItem("yix-language")||"uz";
 let category="";
 let offset=0;
 let articles=[];
@@ -290,6 +303,10 @@ const news=document.getElementById("news");
 const status=document.getElementById("status");
 const loadMore=document.getElementById("loadMore");
 const search=document.getElementById("search");
+const countrySelect=document.getElementById("countrySelect");
+const languageSelect=document.getElementById("languageSelect");
+function updateLanguageOptions(){const options=LANGUAGE_OPTIONS[country]||LANGUAGE_OPTIONS.international;if(!options.some(x=>x[0]===language))language=options[0][0];languageSelect.innerHTML=options.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join("");languageSelect.value=language;document.documentElement.lang=language;}
+countrySelect.value=country;updateLanguageOptions();
 
 function updateThemeButton(){
  const dark=document.documentElement.dataset.theme==="dark";
@@ -320,7 +337,7 @@ function formatDate(value){
  if(!value)return "";
  const date=new Date(value);
  if(Number.isNaN(date.getTime()))return "";
- return new Intl.DateTimeFormat("uz-UZ",{dateStyle:"medium",timeStyle:"short"}).format(date);
+ return new Intl.DateTimeFormat(language==="ru"?"ru-RU":language==="en"?"en-US":language==="tr"?"tr-TR":language==="hi"?"hi-IN":"uz-UZ",{dateStyle:"medium",timeStyle:"short"}).format(date);
 }
 
 function render(){
@@ -339,8 +356,10 @@ function render(){
  news.innerHTML=filtered.map(a=>{ const href=safeUrl(a.link||a.url); const image=safeUrl(a.image); const date=formatDate(a.published_at); return `
  <article class="card">
    <img
+    class="article-image"
     src="${image || 'https://placehold.co/800x500?text=YIX+NEWS'}"
-    onerror="this.src='https://placehold.co/800x500?text=YIX+NEWS'"
+    onload="this.classList.add('loaded')"
+    onerror="this.src='https://placehold.co/800x500?text=YIX+NEWS';this.classList.add('loaded')"
    >
    <div class="content">
      ${href ? `<a class="source" href="${href}" target="_blank" rel="noopener noreferrer">${escapeHtml(a.source || "YIX News")} ↗</a>` : `<div class="source">${escapeHtml(a.source || "YIX News")}</div>`}
@@ -352,7 +371,7 @@ function render(){
  </article>
  `}).join("");
 
- status.textContent=`📰 ${filtered.length} ta ko‘rsatilmoqda · Jami yuklangan: ${articles.length}`;
+ status.textContent=`📰 ${filtered.length} ta ko‘rsatilmoqda · ${country} · ${language.toUpperCase()}`;
 }
 
 function escapeHtml(text){
@@ -370,7 +389,7 @@ async function load(reset=true){
  if(reset){
    offset=0;
    articles=[];
-   news.innerHTML="";
+   news.innerHTML=Array.from({length:6},()=>`<article class="card"><div class="skeleton" style="height:190px"></div><div class="content"><div class="skeleton" style="height:13px;width:45%;margin:12px 0"></div><div class="skeleton" style="height:18px;margin:12px 0"></div><div class="skeleton" style="height:13px;margin:12px 0"></div></div></article>`).join("");
  }
 
  status.textContent="⏳ Yangiliklar yuklanmoqda...";
@@ -378,7 +397,7 @@ async function load(reset=true){
  try{
 
    let url=
-    `${API}?limit=${PAGE_SIZE}&offset=${offset}`;
+    `${API}?limit=${PAGE_SIZE}&offset=${offset}&country=${encodeURIComponent(country)}&language=${encodeURIComponent(language)}`;
 
    if(category){
      url+=`&category=${encodeURIComponent(category)}`;
@@ -394,6 +413,7 @@ async function load(reset=true){
 
    articles.push(...incoming);
    offset+=incoming.length;
+   localStorage.setItem(CACHE_KEY+":"+country+":"+language,JSON.stringify({country,language,articles:articles.slice(0,100)}));
 
    render();
 
@@ -404,7 +424,9 @@ async function load(reset=true){
 
  }catch(e){
 
-   status.textContent="❌ Yangiliklarni yuklab bo‘lmadi";
+   let cached=null;
+   try{cached=JSON.parse(localStorage.getItem(CACHE_KEY+":"+country+":"+language)||"null");}catch{}
+   if(reset && cached && Array.isArray(cached.articles) && cached.articles.length){articles=cached.articles;render();status.textContent="📴 Internet yo‘q. Oxirgi saqlangan yangiliklar ko‘rsatilmoqda.";}else{status.textContent="📴 Internet yo‘q. Skeleton loading davom etmoqda; ulanish tiklanganda qayta yuklanadi.";}
 
  }finally{
    loading=false;
@@ -426,9 +448,11 @@ document.querySelectorAll(".categories button")
 });
 
 search.oninput=render;
-
+countrySelect.onchange=()=>{country=countrySelect.value;language=LANGUAGE_OPTIONS[country][0][0];updateLanguageOptions();localStorage.setItem("yix-country",country);localStorage.setItem("yix-language",language);load(true);};
+languageSelect.onchange=()=>{language=languageSelect.value;localStorage.setItem("yix-language",language);load(true);};
+window.addEventListener("online",()=>load(true));
+window.addEventListener("offline",()=>{if(!articles.length)status.textContent="📴 Internet yo‘q. Skeleton loading...";});
 loadMore.onclick=()=>load(false);
-
 load(true);
 </script>
 
