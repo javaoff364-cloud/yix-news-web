@@ -7,7 +7,7 @@ const packageJson = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url), "utf8")
 );
 
-const HELP = \`YIX News CLI v\${packageJson.version}
+const HELP = `YIX News CLI v${packageJson.version}
 
 Usage:
   npx yixnews <command> [options]
@@ -33,7 +33,7 @@ Examples:
   npx yixnews news --country uzbekistan --language uz --limit 5
   npx yixnews categories --country uzbekistan
   npx yixnews sources --language uz
-\`;
+`;
 
 function parseOptions(args) {
   const options = {};
@@ -54,12 +54,12 @@ function parseOptions(args) {
     }
 
     if (!valueFlags.has(flag)) {
-      throw new Error(\`Unknown option: \${flag}\`);
+      throw new Error(`Unknown option: ${flag}`);
     }
 
     const value = args[index + 1];
     if (!value || value.startsWith("--")) {
-      throw new Error(\`Missing value for \${flag}\`);
+      throw new Error(`Missing value for ${flag}`);
     }
 
     options[flag.slice(2)] = value;
@@ -70,7 +70,7 @@ function parseOptions(args) {
     if (options[key] !== undefined) {
       const number = Number(options[key]);
       if (!Number.isInteger(number) || number < (key === "limit" ? 1 : 0)) {
-        throw new Error(\`--\${key} must be a valid integer.\`);
+        throw new Error(`--${key} must be a valid integer.`);
       }
       options[key] = number;
     }
@@ -80,7 +80,7 @@ function parseOptions(args) {
 }
 
 function printJson(value) {
-  process.stdout.write(\`\${JSON.stringify(value, null, 2)}\\n\`);
+  process.stdout.write(`${JSON.stringify(value, null, 2)}\n`);
 }
 
 function printNews(items) {
@@ -90,11 +90,11 @@ function printNews(items) {
   }
 
   items.forEach((article, index) => {
-    console.log(\`\\n\${index + 1}. \${article.title || "Untitled"}\`);
-    if (article.summary) console.log(\`   \${article.summary}\`);
-    if (article.source) console.log(\`   Source: \${article.source}\`);
-    if (article.published_at) console.log(\`   Published: \${article.published_at}\`);
-    if (article.link) console.log(\`   Link: \${article.link}\`);
+    console.log(`\n${index + 1}. ${article.title || "Untitled"}`);
+    if (article.summary) console.log(`   ${article.summary}`);
+    if (article.source) console.log(`   Source: ${article.source}`);
+    if (article.published_at) console.log(`   Published: ${article.published_at}`);
+    if (article.link) console.log(`   Link: ${article.link}`);
   });
 }
 
@@ -113,7 +113,7 @@ async function main() {
 
   const supported = new Set(["status", "news", "categories", "sources"]);
   if (!supported.has(command)) {
-    throw new Error(\`Unknown command: \${command}. Run "npx yixnews --help".\`);
+    throw new Error(`Unknown command: ${command}. Run "npx yixnews --help".`);
   }
 
   const options = parseOptions(args);
@@ -126,15 +126,15 @@ async function main() {
     const result = await client.getApiStatus();
     if (options.json) printJson(result);
     else {
-      console.log(\`Service: \${result.service || "YIX News API"}\`);
-      console.log(\`Status: \${result.status || "unknown"}\`);
+      console.log(`Service: ${result.service || "YIX News API"}`);
+      console.log(`Status: ${result.status || "unknown"}`);
       if (result.backend) {
-        console.log(\`Backend: \${result.backend.status || "unknown"}\`);
+        console.log(`Backend: ${result.backend.status || "unknown"}`);
         if (result.backend.http_status !== undefined) {
-          console.log(\`HTTP: \${result.backend.http_status}\`);
+          console.log(`HTTP: ${result.backend.http_status}`);
         }
       }
-      if (result.checked_at) console.log(\`Checked: \${result.checked_at}\`);
+      if (result.checked_at) console.log(`Checked: ${result.checked_at}`);
     }
     return;
   }
@@ -169,6 +169,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error(\`yixnews: \${error.message}\`);
+  console.error(`yixnews: ${error.message}`);
   process.exitCode = 1;
 });
