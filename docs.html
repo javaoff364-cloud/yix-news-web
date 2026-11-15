@@ -1,118 +1,44 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080b12">
-<meta name="description" content="YIX News API hujjatlari — yangiliklarni dasturlaringizga ulang.">
-<title>YIX News API Docs</title>
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b12"><meta name="description" content="YIX News REST API va MCP developer hujjatlari"><title>YIX News · Developer Docs</title>
 <style>
-body{margin:0;background:#080b12;color:#f3f4f6;font-family:system-ui;padding:30px}
-main{max-width:900px;margin:auto}
-h1{font-size:45px}
-h2{margin-top:40px;color:#60a5fa}
-p,li{line-height:1.7;color:#b8c0cc}
-code,pre{background:#111722;border:1px solid #202938;border-radius:12px}
-code{padding:3px 7px}
-pre{padding:18px;overflow:auto;color:#dbeafe}
-a{color:#60a5fa}
-.card{background:#111722;border:1px solid #202938;padding:22px;border-radius:18px;margin:18px 0}
-</style>
-</head>
-<body>
-<main>
-
-<p><a href="index.html">← YIX News</a></p>
-
-<h1>YIX News API</h1>
-
-<p>
-YIX News API orqali YIX News platformasidagi
-yangiliklardan dasturlaringizda foydalanishingiz mumkin.
-</p>
-
-<div class="card">
-<h2>Base URL</h2>
-<pre>https://yix-news.onrender.com</pre>
-</div>
-
-<h2>Authentication</h2>
-
-<p>API ishlatish uchun Telegram orqali login qilib,
-API key olishingiz kerak.</p>
-
-<pre>Authorization: Bearer YIX_YOUR_API_KEY</pre>
-
-<h2>GET /api/news</h2>
-
-<p>Yangiliklarni olish.</p>
-
-<pre>GET /api/news?limit=30&offset=0</pre>
-
-<h2>Kategoriya</h2>
-
-<pre>GET /api/news?category=technology</pre>
-
-<p>Mavjud kategoriyalar:</p>
-
-<ul>
-<li>uzbekistan</li>
-<li>world</li>
-<li>technology</li>
-<li>economy</li>
-<li>science</li>
-<li>sport</li>
-<li>cinema</li>
-</ul>
-
-<h2>Pagination</h2>
-
-<pre>GET /api/news?limit=50&offset=50</pre>
-
-<p>
-Bir requestda maksimal 100 ta yangilik olinadi.
-</p>
-
-<h2>Response</h2>
-
-<pre>{
-  "success": true,
-  "count": 30,
-  "limit": 30,
-  "offset": 0,
-  "news": [
-    {
-      "title": "News title",
-      "summary": "News summary",
-      "source": "BBC",
-      "url": "https://example.com",
-      "image": "https://example.com/image.jpg"
-    }
-  ]
-}</pre>
-
-<h2>Rate Limit</h2>
-
-<div class="card">
-<p>🆓 Free API</p>
-<p><strong>1,000 requests / day</strong></p>
-<p>Limit har kuni avtomatik yangilanadi.</p>
-</div>
-
-<h2>Errors</h2>
-
-<pre>401 — API key required
-
-429 — Daily API limit reached
-
-500 — Server error</pre>
-
-<h2>API Dashboard</h2>
-
-<p>
-<a href="dashboard.html">🔑 Telegram orqali login qilish →</a>
-</p>
-
-</main>
-</body>
-</html>
+:root{color-scheme:dark;--bg:#070b14;--panel:#101827d9;--line:#ffffff18;--text:#f4f7ff;--muted:#a5b2c7;--blue:#86b4ff;--cyan:#70eee0}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:radial-gradient(900px 500px at 8% 0%,#2563eb38,transparent 60%),radial-gradient(700px 450px at 100% 20%,#8b5cf62b,transparent 60%),var(--bg);color:var(--text);font:15px/1.7 Inter,system-ui,sans-serif}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:linear-gradient(#fff1 1px,transparent 1px),linear-gradient(90deg,#fff1 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(#000,transparent 75%)}a{color:var(--blue);text-decoration:none}a:hover{color:var(--cyan)}.top{position:sticky;top:0;z-index:5;background:#070b14c9;backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}nav{max-width:1160px;margin:auto;padding:13px 22px;display:flex;justify-content:space-between;align-items:center}.brand{font-size:21px;font-weight:950;color:white;letter-spacing:-1px}.brand span{color:var(--cyan)}.navlinks{display:flex;gap:20px;font-size:13px}.wrap{max-width:1160px;margin:auto;padding:0 22px}.hero{position:relative;padding:82px 0 48px}.orb{position:absolute;right:8%;top:45px;width:220px;height:220px;border-radius:50%;background:#5c7cff55;filter:blur(65px);animation:float 8s ease-in-out infinite;pointer-events:none}@keyframes float{50%{transform:translate(18px,-22px) scale(1.12)}}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--cyan);font-weight:850}.hero h1{font-size:clamp(42px,7vw,76px);line-height:1.02;letter-spacing:-4px;margin:16px 0;max-width:850px}.grad{background:linear-gradient(100deg,#fff,#9dc4ff 55%,#70eee0);background-clip:text;color:transparent}.lead{font-size:18px;color:var(--muted);max-width:680px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.btn{display:inline-block;padding:10px 15px;border-radius:12px;border:1px solid var(--line);background:#ffffff0d;color:white;font-weight:750}.btn.primary{background:linear-gradient(110deg,#2563eb,#745cf6);border:0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:35px}.stat,.panel{border:1px solid var(--line);background:linear-gradient(145deg,#ffffff10,#ffffff05);backdrop-filter:blur(18px);border-radius:19px;box-shadow:0 20px 60px #0002}.stat{padding:16px}.stat b{display:block;font-size:22px}.stat small{color:var(--muted)}.layout{display:grid;grid-template-columns:205px minmax(0,1fr);gap:22px;padding-bottom:70px}.side{position:sticky;top:78px;align-self:start;padding:17px;border:1px solid var(--line);border-radius:16px;background:#ffffff08}.side b{display:block;margin-bottom:9px}.side a{display:block;font-size:13px;color:var(--muted);padding:5px 0}.panel{padding:clamp(19px,3vw,30px);margin-bottom:18px;min-width:0}.panel h2{font-size:27px;letter-spacing:-1px;margin:0 0 8px}.panel h3{margin:23px 0 8px}.muted{color:var(--muted)}.endpoint{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:15px 0;padding:14px;border:1px solid var(--line);border-radius:13px;background:#080f1c}.endpoint code{color:var(--cyan);overflow-wrap:anywhere}.copy{background:#ffffff0d;border:1px solid var(--line);color:white;border-radius:8px;padding:7px 10px;cursor:pointer}.method{color:#a7f3d0;background:#10b98120;border-radius:6px;padding:3px 7px;font-size:11px;font-weight:900;margin-right:7px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin:14px 0}table{width:100%;border-collapse:collapse;min-width:480px}td,th{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-size:13px}th{background:#ffffff09;color:#d8e5f8}td{color:var(--muted)}td code{color:#a9caff}.code{margin:12px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#060b13}.codehead{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}pre{padding:15px;margin:0;overflow:auto;color:#d6e6ff;font:12px/1.75 ui-monospace,monospace}.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{border:1px solid var(--line);border-radius:7px;padding:4px 8px;color:#c7d7ef;font:12px ui-monospace,monospace}.notice{border-left:3px solid var(--cyan);background:#70eee00d;padding:12px 14px;border-radius:0 10px 10px 0;color:#c5d2e3;font-size:13px}.try{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}.try label{display:grid;gap:5px;color:var(--muted);font-size:12px}.try select,.try input{padding:10px;background:#0b1321;border:1px solid var(--line);border-radius:9px;color:white}.result{white-space:pre-wrap;overflow:auto;max-height:300px;padding:13px;border:1px solid var(--line);border-radius:10px;background:#050a12;color:#b9d4f7;font:12px/1.6 ui-monospace,monospace}.reveal{opacity:0;transform:translateY(15px);transition:.65s}.reveal.show{opacity:1;transform:none}footer{padding:25px 0 45px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}@media(max-width:760px){.layout{grid-template-columns:1fr}.side{position:static;display:flex;gap:14px;overflow:auto;white-space:nowrap}.side b{display:none}.navlinks{gap:10px}.navlinks a:not(:last-child){display:none}.hero{padding-top:52px}.hero h1{letter-spacing:-2px}.stats{grid-template-columns:1fr}}@media(max-width:500px){.try{grid-template-columns:1fr}.wrap{padding:0 14px}nav{padding:12px 14px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
+</style></head><body>
+<header class="top"><nav><a class="brand" href="index.html">YIX<span>NEWS</span></a><div class="navlinks"><a href="#api">REST API</a><a href="#mcp">MCP</a><a href="dashboard.html">Dashboard ↗</a></div></nav></header>
+<main class="wrap"><section class="hero"><div class="orb"></div><div class="eyebrow">YIX NEWS · DEVELOPER PLATFORM</div><h1><span class="grad">Build with YIX News.</span><br>Yangiliklarni integratsiya qiling.</h1><p class="lead">REST API va MCP server orqali O‘zbekiston hamda dunyo yangiliklarini web, mobil ilova, bot va AI agentlaringizga ulang.</p><div class="actions"><a class="btn primary" href="#quickstart">Tez boshlash →</a><a class="btn" href="https://yixnews-mcp.vercel.app">MCP server ↗</a><a class="btn" href="https://yixnews-api.vercel.app/api/health">API holati ↗</a></div><div class="stats"><div class="stat"><b>REST</b><small>HTTP JSON API</small></div><div class="stat"><b>MCP</b><small>AI tool integration</small></div><div class="stat"><b>JSON</b><small>Oddiy javob formati</small></div></div></section>
+<div class="layout"><aside class="side"><b>Hujjatlar</b><a href="#quickstart">Tez boshlash</a><a href="#api">API endpointlar</a><a href="#params">Parametrlar</a><a href="#auth">Autentifikatsiya</a><a href="#examples">Kod namunalari</a><a href="#mcp">MCP server</a><a href="#tools">MCP tools</a><a href="#errors">Xatoliklar</a></aside><div>
+<section id="quickstart" class="panel reveal"><div class="eyebrow">01 · QUICK START</div><h2>Bir so‘rov bilan boshlang</h2><p class="muted">Ochiq yangiliklar oqimi uchun API key kerak emas.</p><div class="endpoint"><div><span class="method">GET</span><code>https://yixnews-api.vercel.app/api/site-news?limit=10&amp;offset=0</code></div><button class="copy" data-copy="https://yixnews-api.vercel.app/api/site-news?limit=10&offset=0">Copy URL</button></div><a href="https://yixnews-api.vercel.app/api/site-news?limit=10&offset=0" target="_blank" rel="noreferrer">Namunaviy so‘rovni ochish ↗</a></section>
+<section id="api" class="panel reveal"><div class="eyebrow">02 · REST API</div><h2>API manzillari</h2><div class="endpoint"><div><span class="method">BASE URL</span><code>https://yixnews-api.vercel.app</code></div><button class="copy" data-copy="https://yixnews-api.vercel.app">Copy</button></div><div class="tablewrap"><table><tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Vazifasi</th></tr><tr><td>GET</td><td><code>/api/site-news</code></td><td>Yo‘q</td><td>Ochiq yangiliklar oqimi</td></tr><tr><td>GET</td><td><code>/api/news</code></td><td>Bearer key</td><td>Himoyalangan yangiliklar</td></tr><tr><td>GET</td><td><code>/api/me</code></td><td>Bearer key</td><td>API hisob ma’lumoti</td></tr><tr><td>GET</td><td><code>/api/session/me</code></td><td>Session token</td><td>Joriy web sessiya</td></tr><tr><td>GET</td><td><code>/api/health</code></td><td>Yo‘q</td><td>Gateway holati</td></tr><tr><td>POST</td><td><code>/api/auth/start</code></td><td>Yo‘q</td><td>Telegram loginni boshlash</td></tr></table></div><div class="notice">Yangi boshlayotganlar uchun <code>/api/site-news</code> endpointidan foydalaning. Himoyalangan endpointlar API key talab qiladi.</div></section>
+<section id="params" class="panel reveal"><div class="eyebrow">03 · QUERY PARAMETERS</div><h2>Filtrlash va pagination</h2><div class="tablewrap"><table><tr><th>Parametr</th><th>Qiymat</th><th>Izoh</th></tr><tr><td><code>limit</code></td><td>1–100</td><td>Yangiliklar soni</td></tr><tr><td><code>offset</code></td><td>0 yoki katta</td><td>Boshlanish indeksi</td></tr><tr><td><code>category</code></td><td>uzbekistan, world, technology, economy, science, sport, gaming, cinema</td><td>Kategoriya</td></tr><tr><td><code>country</code></td><td>uzbekistan, usa, uk, russia, turkey, india, international</td><td>Mamlakat</td></tr><tr><td><code>language</code></td><td>uz, ru, en, tr, hi</td><td>Til</td></tr></table></div><p class="muted">Pagination: 1-sahifa <code>offset=0</code>, 2-sahifa <code>offset=10</code>, 3-sahifa <code>offset=20</code> (agar <code>limit=10</code> bo‘lsa).</p><div class="chips"><span class="chip">uzbekistan</span><span class="chip">world</span><span class="chip">technology</span><span class="chip">economy</span><span class="chip">science</span><span class="chip">sport</span><span class="chip">gaming</span><span class="chip">cinema</span></div><div class="code"><div class="codehead">GET request <button class="copy" data-copy="https://yixnews-api.vercel.app/api/site-news?category=technology&country=uzbekistan&language=uz&limit=10&offset=0">Copy</button></div><pre>/api/site-news?category=technology&amp;country=uzbekistan&amp;language=uz&amp;limit=10&amp;offset=0</pre></div></section>
+<section id="auth" class="panel reveal"><div class="eyebrow">04 · AUTHENTICATION</div><h2>API key bilan ishlash</h2><p class="muted">Ochiq <code>/api/site-news</code> uchun key shart emas. Himoyalangan <code>/api/news</code> va <code>/api/me</code> uchun API key kerak.</p><ol class="muted"><li><a href="dashboard.html">API Dashboard</a>ga o‘ting.</li><li>Telegram orqali login qiling.</li><li>Berilgan API key’ni xavfsiz saqlang.</li><li>Key’ni server tomonda Authorization header orqali yuboring.</li></ol><div class="code"><div class="codehead">HTTP header <button class="copy" data-copy="Authorization: Bearer YIX_YOUR_API_KEY">Copy</button></div><pre>Authorization: Bearer YIX_YOUR_API_KEY</pre></div><div class="notice">API key’ni frontend kodiga, ochiq GitHub repository yoki ommaviy joyga joylamang.</div></section>
+<section id="examples" class="panel reveal"><div class="eyebrow">05 · CODE EXAMPLES</div><h2>Kod namunalari</h2><h3>JavaScript</h3><div class="code"><div class="codehead">fetch <button class="copy" data-copy='const url = "https://yixnews-api.vercel.app/api/site-news?limit=10&offset=0";
+const response = await fetch(url);
+if (!response.ok) throw new Error("HTTP " + response.status);
+const data = await response.json();
+console.log(data.news);'>Copy</button></div><pre>const url = "https://yixnews-api.vercel.app/api/site-news?limit=10&amp;offset=0";
+const response = await fetch(url);
+if (!response.ok) throw new Error("HTTP " + response.status);
+const data = await response.json();
+console.log(data.news);</pre></div><h3>Python</h3><div class="code"><div class="codehead">requests <button class="copy" data-copy='import requests
+url = "https://yixnews-api.vercel.app/api/site-news"
+response = requests.get(url, params={"limit": 10, "offset": 0}, timeout=20)
+response.raise_for_status()
+print(response.json()["news"])'>Copy</button></div><pre>import requests
+url = "https://yixnews-api.vercel.app/api/site-news"
+response = requests.get(url, params={"limit": 10, "offset": 0}, timeout=20)
+response.raise_for_status()
+print(response.json()["news"])</pre></div><h3>cURL</h3><div class="code"><div class="codehead">Terminal <button class="copy" data-copy='curl "https://yixnews-api.vercel.app/api/site-news?limit=10&offset=0"'>Copy</button></div><pre>curl "https://yixnews-api.vercel.app/api/site-news?limit=10&amp;offset=0"</pre></div><h3>Jonli API tester</h3><div class="try"><label>Kategoriya<select id="category"><option value="">Barchasi</option><option>uzbekistan</option><option>world</option><option>technology</option><option>economy</option><option>science</option><option>sport</option><option>gaming</option><option>cinema</option></select></label><label>Mamlakat<select id="country"><option value="">Barchasi</option><option>uzbekistan</option><option>usa</option><option>uk</option><option>russia</option><option>turkey</option><option>india</option><option>international</option></select></label><label>Til<select id="language"><option value="">Barchasi</option><option value="uz">O‘zbekcha</option><option value="ru">Русский</option><option value="en">English</option><option value="tr">Türkçe</option><option value="hi">हिन्दी</option></select></label><label>Limit<input id="limit" type="number" min="1" max="100" value="10"></label><label>Offset<input id="offset" type="number" min="0" value="0"></label></div><button class="btn primary" id="run">API so‘rovini yuborish →</button><pre id="result" class="result">Natija shu yerda ko‘rinadi.</pre></section>
+<section id="mcp" class="panel reveal"><div class="eyebrow">06 · MODEL CONTEXT PROTOCOL</div><h2>AI agentlar uchun MCP</h2><p class="muted">MCP server AI klientlarga YIX News ma’lumotlarini tool sifatida chaqirish imkonini beradi. Transport turi — Streamable HTTP.</p><div class="endpoint"><div><span class="method">MCP URL</span><code>https://yixnews-mcp.vercel.app/api/mcp</code></div><button class="copy" data-copy="https://yixnews-mcp.vercel.app/api/mcp">Copy URL</button></div><ol class="muted"><li>MCP qo‘llaydigan klientda remote server qo‘shing.</li><li>Transport sifatida Streamable HTTP ni tanlang.</li><li>Yuqoridagi endpoint URL’ni kiriting.</li><li>Tool’larni yangilang va <code>get_news</code> ni chaqiring.</li></ol><div class="notice">Bu remote HTTP MCP server. Uni local stdio server sifatida sozlamang. Klientning ulash oynasi farq qilishi mumkin.</div><p><a href="https://yixnews-mcp.vercel.app">MCP server sahifasi ↗</a></p></section>
+<section id="tools" class="panel reveal"><div class="eyebrow">07 · MCP TOOLS</div><h2>Mavjud tool’lar</h2><div class="tablewrap"><table><tr><th>Tool</th><th>Parametrlar</th><th>Vazifasi</th></tr><tr><td><code>get_news</code></td><td>category, country, language, limit, offset</td><td>Yangiliklarni olish</td></tr><tr><td><code>list_categories</code></td><td>Yo‘q</td><td>Kategoriyalar ro‘yxati</td></tr><tr><td><code>list_sources</code></td><td>limit</td><td>Manbalar ro‘yxati</td></tr><tr><td><code>get_api_status</code></td><td>Yo‘q</td><td>API holati</td></tr></table></div><div class="code"><div class="codehead">get_news arguments <button class="copy" data-copy='{"category":"technology","country":"uzbekistan","language":"uz","limit":10,"offset":0}'>Copy</button></div><pre>{
+  "category": "technology",
+  "country": "uzbekistan",
+  "language": "uz",
+  "limit": 10,
+  "offset": 0
+}</pre></div><p class="muted"><code>limit</code> va <code>offset</code> raqam bo‘lishi kerak; yangilangan server raqam ko‘rinishidagi stringni ham qabul qiladi.</p></section>
+<section id="errors" class="panel reveal"><div class="eyebrow">08 · TROUBLESHOOTING</div><h2>Xatoliklar</h2><div class="tablewrap"><table><tr><th>HTTP</th><th>Ma’nosi</th><th>Yechim</th></tr><tr><td>400</td><td>Noto‘g‘ri parametr</td><td>Filtr va pagination qiymatlarini tekshiring.</td></tr><tr><td>401</td><td>Autentifikatsiya yo‘q</td><td>Bearer key yoki session token yuboring.</td></tr><tr><td>429</td><td>Kunlik limit tugagan</td><td>Limit yangilanishini kuting.</td></tr><tr><td>500</td><td>Backend xatosi</td><td>Keyinroq qayta urinib ko‘ring.</td></tr><tr><td>502</td><td>Backend javob bermadi</td><td>Health endpointni tekshiring.</td></tr></table></div><p class="muted">GitHub: <a href="https://github.com/javaoff364-cloud/yix-news">Backend</a> · <a href="https://github.com/javaoff364-cloud/yix-news-web">Frontend / docs</a></p></section>
+</div></div><footer>© 2026 YIX News Developer Platform · <a href="index.html">Asosiy sayt</a> · <a href="https://yixnews-api.vercel.app">API</a> · <a href="https://yixnews-mcp.vercel.app">MCP</a></footer></main>
+<script>
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(b.dataset.copy);const old=b.textContent;b.textContent='Copied ✓';setTimeout(()=>b.textContent=old,1300)}catch{b.textContent='Copy failed'}}));
+const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.07});document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
+document.getElementById('run').addEventListener('click',async()=>{const out=document.getElementById('result');const limit=Math.min(100,Math.max(1,Number(document.getElementById('limit').value)||10));const offset=Math.max(0,Number(document.getElementById('offset').value)||0);const p=new URLSearchParams({limit:String(limit),offset:String(offset)});['category','country','language'].forEach(k=>{const v=document.getElementById(k).value;if(v)p.set(k,v)});const url='https://yixnews-api.vercel.app/api/site-news?'+p.toString();out.textContent='Yuklanmoqda…\n'+url;try{const r=await fetch(url);const d=await r.json();out.textContent='HTTP '+r.status+'\n'+JSON.stringify(d,null,2)}catch(e){out.textContent='So‘rov bajarilmadi: '+e.message+'\n'+url}});
+</script></body></html>
