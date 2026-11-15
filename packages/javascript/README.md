@@ -9,13 +9,13 @@ Official JavaScript / TypeScript SDK and command-line tool for the [YIX News API
 
 ## Install the SDK
 
-\`\`\`bash
+```bash
 npm install yixnews
-\`\`\`
+```
 
 ## JavaScript quick start
 
-\`\`\`js
+```js
 import { YIXNews } from "yixnews";
 
 const yix = new YIXNews();
@@ -28,17 +28,17 @@ const result = await yix.getNews({
 for (const article of result.news) {
   console.log(article.title, article.link);
 }
-\`\`\`
+```
 
-The normalized article fields are \`id\`, \`title\`, \`link\`, \`summary\`, \`image\`,
-\`video_url\`, \`source\`, \`category\`, \`country\`, \`language\`, and \`published_at\`.
-Use \`link\` for the article URL and \`summary\` for its description.
+The normalized article fields are `id`, `title`, `link`, `summary`, `image`,
+`video_url`, `source`, `category`, `country`, `language`, and `published_at`.
+Use `link` for the article URL and `summary` for its description.
 
 ## TypeScript
 
 Type declarations are included:
 
-\`\`\`ts
+```ts
 import {
   YIXNews,
   type NewsItem,
@@ -57,72 +57,72 @@ const response: NewsResponse = await client.getNews(query);
 const firstArticle: NewsItem | undefined = response.news[0];
 
 console.log(firstArticle?.title, firstArticle?.link);
-\`\`\`
+```
 
 ## Methods
 
-- \`getNews({ category, country, language, limit, offset, signal })\` — fetch public news.
-- \`getCategories(options?)\` — derive available categories from recent news.
-- \`getSources(options?)\` — derive available sources from recent news.
-- \`getApiStatus({ signal? })\` — check the API gateway health endpoint.
+- `getNews({ category, country, language, limit, offset, signal })` — fetch public news.
+- `getCategories(options?)` — derive available categories from recent news.
+- `getSources(options?)` — derive available sources from recent news.
+- `getApiStatus({ signal? })` — check the API gateway health endpoint.
 
-Supported countries: \`uzbekistan\`, \`usa\`, \`uk\`, \`russia\`, \`turkey\`, \`india\`, \`international\`.
+Supported countries: `uzbekistan`, `usa`, `uk`, `russia`, `turkey`, `india`, `international`.
 
-Supported languages: \`uz\`, \`ru\`, \`en\`, \`tr\`, \`hi\`.
+Supported languages: `uz`, `ru`, `en`, `tr`, `hi`.
 
 ## Options and errors
 
-\`\`\`js
+```js
 const yix = new YIXNews({
   baseUrl: "https://yixnews-api.vercel.app",
   timeout: 10000
 });
-\`\`\`
+```
 
-Pass an \`AbortSignal\` in request options to cancel a request:
+Pass an `AbortSignal` in request options to cancel a request:
 
-\`\`\`js
+```js
 const controller = new AbortController();
 const pending = yix.getNews({ country: "uzbekistan", signal: controller.signal });
 controller.abort();
 await pending;
-\`\`\`
+```
 
-Requests throw \`YIXNewsError\`, which includes \`status\`, \`payload\`, and \`url\`.
+Requests throw `YIXNewsError`, which includes `status`, `payload`, and `url`.
 Timeout errors and user-cancelled requests have distinct messages.
 
 ## Command-line interface
 
 Run without installing globally:
 
-\`\`\`bash
+```bash
 npx yixnews --help
 npx yixnews status
 npx yixnews news --country uzbekistan --language uz --limit 10
 npx yixnews categories --country uzbekistan --language uz
 npx yixnews sources --country uzbekistan --language uz
-\`\`\`
+```
 
 Available commands:
 
 | Command | Description |
 | --- | --- |
-| \`status\` | Show API and backend health |
-| \`news\` | List recent news |
-| \`categories\` | List categories found in recent news |
-| \`sources\` | List sources found in recent news |
-| \`--version\` | Show installed CLI version |
-| \`--help\` | Show usage information |
+| `status` | Show API and backend health |
+| `news` | List recent news |
+| `categories` | List categories found in recent news |
+| `sources` | List sources found in recent news |
+| `--version` | Show installed CLI version |
+| `--help` | Show usage information |
 
-The \`news\`, \`categories\`, and \`sources\` commands accept \`--country\`,
-\`--language\`, and \`--category\`. The \`news\` command also accepts
-\`--limit\` and \`--offset\`. Add \`--json\` to print raw JSON.
+The `news`, `categories`, and `sources` commands accept `--country`,
+`--language`, and `--category`. The `news` command also accepts
+`--limit` and `--offset`. Add `--json` to print raw JSON.
 
-For a custom API origin, set \`YIXNEWS_API_URL\`:
+For a custom API origin, set `YIXNEWS_API_URL`:
 
-\`\`\`bash
+```bash
 YIXNEWS_API_URL=https://yixnews-api.vercel.app npx yixnews status
-\`\`\`
+```
 
 ## Termux / Android
 
