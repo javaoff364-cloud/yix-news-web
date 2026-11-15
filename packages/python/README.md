@@ -8,7 +8,7 @@ Official Python SDK for the [YIX News API](https://yixnews-api.vercel.app).
 python -m pip install yixnews
 ```
 
-Python 3.9+; no runtime dependencies.
+Python 3.9+; no runtime dependencies. The SDK uses only Python's standard library for HTTP requests.
 
 ## Quick start
 
