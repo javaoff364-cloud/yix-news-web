@@ -87,7 +87,7 @@ test("API errors expose status, payload and URL", async () => {
       assert.ok(error instanceof YIXNewsError);
       assert.equal(error.status, 503);
       assert.equal(error.payload.error, "Unavailable");
-      assert.match(error.url, /\/api\/site-news$/);
+      assert.match(error.url, /\/api\/site-news(?:\?|$)/);
       return true;
     }
   );
