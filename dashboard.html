@@ -427,20 +427,18 @@ const API_KEY = "yix_api_key";
    THEME
 ========================= */
 
+function updateThemeButton(){
+  const light = document.body.classList.contains("light");
+  const button = document.getElementById("themeBtn");
+  button.textContent = light ? "☀️" : "🌙";
+  button.setAttribute("aria-label", light ? "Dark mode" : "Light mode");
+}
+
 function toggleTheme(){
-
   document.body.classList.toggle("light");
-
-  const light =
-    document.body.classList.contains("light");
-
-  localStorage.setItem(
-    "yix_theme",
-    light ? "light" : "dark"
-  );
-
-  document.getElementById("themeBtn").textContent =
-    light ? "☀️" : "🌙";
+  const light = document.body.classList.contains("light");
+  localStorage.setItem("yix_theme", light ? "light" : "dark");
+  updateThemeButton();
 }
 
 
@@ -456,6 +454,7 @@ function toggleTheme(){
       "☀️";
   }
 
+  updateThemeButton();
 })();
 
 
@@ -603,6 +602,8 @@ async function copyKey(){
 async function startTelegramLogin(){
 
   setLoginError("");
+  // Open synchronously from the click gesture so popup blockers do not stop Telegram.
+  const telegramWindow = window.open("about:blank", "_blank");
 
   const button =
     document.getElementById("telegram-login-btn");
@@ -639,16 +640,21 @@ async function startTelegramLogin(){
     status.textContent =
       "🤖 Telegram ochildi. Botdagi ko'rsatmalarga amal qiling.";
 
-    window.open(
-      data.telegram_url,
-      "_blank"
-    );
+    if(telegramWindow){
+      telegramWindow.location.href = data.telegram_url;
+    }else{
+      status.textContent = "Telegram oynasi bloklandi. Telegramga o‘tish uchun sahifani qayta oching.";
+      window.location.assign(data.telegram_url);
+    }
 
     button.textContent =
       "🤖 Telegram'da tasdiqlashni kuting...";
 
   }catch(error){
 
+    if(telegramWindow && !telegramWindow.closed){
+      telegramWindow.close();
+    }
     console.error(error);
 
     setLoginError(
