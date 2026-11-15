@@ -1,0 +1,41 @@
+name: Test SDKs
+
+on:
+  pull_request:
+    paths:
+      - "packages/**"
+      - ".github/workflows/test-sdks.yml"
+  push:
+    branches: [master]
+    paths:
+      - "packages/**"
+      - ".github/workflows/test-sdks.yml"
+
+jobs:
+  javascript:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/javascript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+
+  python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade build
+      - run: python -m unittest discover -s tests -v
+        env:
+          PYTHONPATH: src
+      - run: python -m build
