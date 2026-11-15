@@ -19,7 +19,7 @@
   "engines": { "node": ">=18" },
   "scripts": {
     "test": "node --test && npm run test:types",
-    "test:types": "npx --yes --package typescript tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --lib ES2022,DOM test/types.test.ts",
+    "test:types": "npx --yes --package typescript tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --lib ES2022,DOM type-tests/types.test.ts",
     "prepublishOnly": "npm test"
   },
   "keywords": ["yixnews", "news", "news-api", "uzbekistan", "cli", "typescript"],
