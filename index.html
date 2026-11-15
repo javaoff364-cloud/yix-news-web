@@ -99,7 +99,24 @@ button,.navlink{
 }
 
 .preferences{max-width:1200px;margin:auto;padding:0 20px 18px;display:flex;gap:10px;flex-wrap:wrap}
-.preferences select{min-width:190px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font:inherit}
+.preferences select{appearance:none;min-width:190px;padding:13px 42px 13px 15px;border:1px solid var(--border);border-radius:14px;background-color:var(--card);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818a99' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;color:var(--text);font:inherit;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.preferences select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent)}
+input[type=radio]{accent-color:var(--accent);width:17px;height:17px}
+.icon{width:18px;height:18px;display:inline-block;vertical-align:middle;flex:none}
+.categories button{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.categories button .icon{width:16px;height:16px}
+.media-frame{height:190px;background:var(--border);position:relative;overflow:hidden}
+.media-frame img,.media-frame video,.media-frame iframe{display:block;width:100%;height:100%;object-fit:cover;border:0}
+.media-frame .media-empty{height:100%;display:grid;place-items:center;color:var(--muted);background:linear-gradient(135deg,var(--card),var(--border))}
+.media-frame .media-empty .icon{width:34px;height:34px;opacity:.55}
+.card .content{min-height:205px}
+.card .date{display:flex;align-items:center;gap:6px}
+.card .date .icon{width:13px;height:13px}
+#themeToggle{display:inline-flex;align-items:center;justify-content:center;min-width:42px}
+#themeToggle .icon{width:18px;height:18px}
+.search{position:relative}
+.search input{padding-left:48px}
+.search:before{content:"";position:absolute;left:37px;top:50%;transform:translateY(-50%);width:17px;height:17px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23818a99' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E");pointer-events:none}
 .skeleton{background:linear-gradient(90deg,var(--border) 25%,rgba(150,150,150,.18) 50%,var(--border) 75%);background-size:200% 100%;animation:yix-shimmer 1.2s infinite}
 @keyframes yix-shimmer{to{background-position:-200% 0}}
 .card img{opacity:0;transition:opacity .25s;background-color:var(--border);background-image:linear-gradient(90deg,var(--border),rgba(150,150,150,.22),var(--border));background-size:200% 100%;animation:yix-shimmer 1.2s infinite}
@@ -243,7 +260,7 @@ footer{
 <div class="actions">
 <a class="navlink" href="docs.html">API Docs</a>
 <a class="navlink" href="dashboard.html">API</a>
-<button id="themeToggle" onclick="toggleTheme()" aria-label="Dark mode">🌙</button>
+<button id="themeToggle" onclick="toggleTheme()" aria-label="Dark mode"></button>
 </div>
 </div>
 </header>
@@ -257,22 +274,22 @@ tez, qulay va zamonaviy interfeysda kuzating.
 </section>
 
 <div class="preferences">
-<select id="countrySelect" aria-label="Davlat"><option value="uzbekistan">🇺🇿 O‘zbekiston</option><option value="usa">🇺🇸 AQSH</option><option value="uk">🇬🇧 Buyuk Britaniya</option><option value="russia">🇷🇺 Rossiya</option><option value="turkey">🇹🇷 Turkiya</option><option value="india">🇮🇳 Hindiston</option><option value="international">🌍 Xalqaro</option></select>
+<select id="countrySelect" aria-label="Davlat"><option value="uzbekistan">O‘zbekiston</option><option value="usa">AQSH</option><option value="uk">Buyuk Britaniya</option><option value="russia">Rossiya</option><option value="turkey">Turkiya</option><option value="india">Hindiston</option><option value="international">Xalqaro</option></select>
 <select id="languageSelect" aria-label="Til"></select>
 </div>
 <div class="search">
-<input id="search" placeholder="🔎 Yangilik qidirish...">
+<input id="search" placeholder="Yangilik qidirish...">
 </div>
 
 <div class="categories">
-<button class="active" data-cat="">Barchasi</button>
-<button data-cat="uzbekistan">🇺🇿 O‘zbekiston</button>
-<button data-cat="world">🌍 Dunyo</button>
-<button data-cat="technology">💻 Texnologiya</button>
-<button data-cat="economy">💰 Iqtisodiyot</button>
-<button data-cat="science">🔬 Fan</button>
-<button data-cat="sport">⚽ Sport</button>
-<button data-cat="cinema">🎬 Kino</button>
+<button class="active" data-cat=""><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h18M3 10h18M3 16h18M3 22h18"/></svg>Barchasi</button>
+<button data-cat="uzbekistan"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h16"/></svg>O‘zbekiston</button>
+<button data-cat="world"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>Dunyo</button>
+<button data-cat="technology"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>Texnologiya</button>
+<button data-cat="economy"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20m5-15H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H6"/></svg>Iqtisodiyot</button>
+<button data-cat="science"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6m-5 0v7l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3M8 15h8"/></svg>Fan</button>
+<button data-cat="sport"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m12 3 3 6-3 4-6-1-3 4m18-4-6 1-3-4 3-6m-9 9 3 8m6-8-3 8"/></svg>Sport</button>
+<button data-cat="cinema"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>Kino</button>
 </div>
 
 <div class="status" id="status">⏳ Yuklanmoqda...</div>
@@ -312,7 +329,7 @@ function updateThemeButton(){
  const dark=document.documentElement.dataset.theme==="dark";
  const button=document.getElementById("themeToggle");
  if(button){
-   button.textContent=dark?"☀️":"🌙";
+   button.innerHTML=dark?'<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>':'<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg>';
    button.setAttribute("aria-label",dark?"Light mode":"Dark mode");
  }
 }
@@ -337,7 +354,7 @@ function formatDate(value){
  if(!value)return "";
  const date=new Date(value);
  if(Number.isNaN(date.getTime()))return "";
- return new Intl.DateTimeFormat(language==="ru"?"ru-RU":language==="en"?"en-US":language==="tr"?"tr-TR":language==="hi"?"hi-IN":"uz-UZ",{dateStyle:"medium",timeStyle:"short"}).format(date);
+ return new Intl.DateTimeFormat(language==="ru"?"ru-RU":language==="en"?"en-US":language==="tr"?"tr-TR":"uz-UZ",{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"}).format(date);
 }
 
 function render(){
@@ -353,25 +370,34 @@ function render(){
    return text.includes(q);
  });
 
- news.innerHTML=filtered.map(a=>{ const href=safeUrl(a.link||a.url); const image=safeUrl(a.image); const date=formatDate(a.published_at); return `
+ news.innerHTML=filtered.map(a=>{
+   const href=safeUrl(a.link||a.url);
+   const image=safeUrl(a.image);
+   const video=safeUrl(a.video_url);
+   const date=formatDate(a.published_at);
+   const isDirectVideo=video && /\\.(mp4|webm|ogg)(\\?|$)/i.test(video);
+   const media=video
+     ? (isDirectVideo
+       ? `<div class="media-frame"><video controls playsinline preload="metadata" poster="${image}"><source src="${video}"></video></div>`
+       : `<div class="media-frame"><iframe src="${video}" title="Yangilik videosi" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`)
+     : image && !image.includes("placehold.co")
+       ? `<div class="media-frame"><img class="article-image" src="${image}" alt="${escapeHtml(a.title||"Yangilik rasmi")}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.parentElement.innerHTML='<div class=media-empty><svg class=icon viewBox=0 0 24 24 fill=none stroke=currentColor stroke-width=2><rect x=3 y=3 width=18 height=18 rx=2/><circle cx=8.5 cy=8.5 r=1.5/><path d=m21 15-5-5L5 21 /></svg></div>'"></div>`
+       : `<div class="media-frame"><div class="media-empty"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div></div>`;
+   return `
  <article class="card">
-   <img
-    class="article-image"
-    src="${image || 'https://placehold.co/800x500?text=YIX+NEWS'}"
-    onload="this.classList.add('loaded')"
-    onerror="this.src='https://placehold.co/800x500?text=YIX+NEWS';this.classList.add('loaded')"
-   >
+   ${media}
    <div class="content">
      ${href ? `<a class="source" href="${href}" target="_blank" rel="noopener noreferrer">${escapeHtml(a.source || "YIX News")} ↗</a>` : `<div class="source">${escapeHtml(a.source || "YIX News")}</div>`}
-     ${date ? `<div class="date">${escapeHtml(date)}</div>` : ""}
+     ${date ? `<div class="date"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${escapeHtml(date)}</div>` : ""}
      <div class="title">${escapeHtml(a.title || "")}</div>
      <div class="summary">${escapeHtml(a.summary || "")}</div>
-     ${href ? `<a class="read" href="${href}" target="_blank" rel="noopener noreferrer">Maqolani o‘qish →</a>` : ""}
+     ${href ? `<a class="read" href="${href}" target="_blank" rel="noopener noreferrer">Maqolani o‘qish <span aria-hidden="true">→</span></a>` : ""}
    </div>
  </article>
- `}).join("");
+ `;
+ }).join("");
 
- status.textContent=`📰 ${filtered.length} ta ko‘rsatilmoqda · ${country} · ${language.toUpperCase()}`;
+ status.textContent=`${filtered.length} ta yangilik · ${country} · ${language.toUpperCase()}`;
 }
 
 function escapeHtml(text){
@@ -392,7 +418,7 @@ async function load(reset=true){
    news.innerHTML=Array.from({length:6},()=>`<article class="card"><div class="skeleton" style="height:190px"></div><div class="content"><div class="skeleton" style="height:13px;width:45%;margin:12px 0"></div><div class="skeleton" style="height:18px;margin:12px 0"></div><div class="skeleton" style="height:13px;margin:12px 0"></div></div></article>`).join("");
  }
 
- status.textContent="⏳ Yangiliklar yuklanmoqda...";
+ status.textContent="Yangiliklar yuklanmoqda...";
 
  try{
 
@@ -426,7 +452,7 @@ async function load(reset=true){
 
    let cached=null;
    try{cached=JSON.parse(localStorage.getItem(CACHE_KEY+":"+country+":"+language)||"null");}catch{}
-   if(reset && cached && Array.isArray(cached.articles) && cached.articles.length){articles=cached.articles;render();status.textContent="📴 Internet yo‘q. Oxirgi saqlangan yangiliklar ko‘rsatilmoqda.";}else{status.textContent="📴 Internet yo‘q. Skeleton loading davom etmoqda; ulanish tiklanganda qayta yuklanadi.";}
+   if(reset && cached && Array.isArray(cached.articles) && cached.articles.length){articles=cached.articles;render();status.textContent="Internet aloqasi yo‘q. Saqlangan so‘nggi yangiliklar ko‘rsatilmoqda.";}else{status.textContent="Internet aloqasi yo‘q. Ulanish tiklanganda yangiliklar qayta yuklanadi.";}
 
  }finally{
    loading=false;
@@ -451,7 +477,7 @@ search.oninput=render;
 countrySelect.onchange=()=>{country=countrySelect.value;language=LANGUAGE_OPTIONS[country][0][0];updateLanguageOptions();localStorage.setItem("yix-country",country);localStorage.setItem("yix-language",language);load(true);};
 languageSelect.onchange=()=>{language=languageSelect.value;localStorage.setItem("yix-language",language);load(true);};
 window.addEventListener("online",()=>load(true));
-window.addEventListener("offline",()=>{if(!articles.length)status.textContent="📴 Internet yo‘q. Skeleton loading...";});
+window.addEventListener("offline",()=>{if(!articles.length)status.textContent="Internet aloqasi yo‘q.";});
 loadMore.onclick=()=>load(false);
 load(true);
 </script>
