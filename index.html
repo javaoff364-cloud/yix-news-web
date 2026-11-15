@@ -102,8 +102,8 @@ button,.navlink{
 .preferences select{min-width:190px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font:inherit}
 .skeleton{background:linear-gradient(90deg,var(--border) 25%,rgba(150,150,150,.18) 50%,var(--border) 75%);background-size:200% 100%;animation:yix-shimmer 1.2s infinite}
 @keyframes yix-shimmer{to{background-position:-200% 0}}
-.card img{background-color:var(--border);background-image:linear-gradient(90deg,var(--border),rgba(150,150,150,.22),var(--border));background-size:200% 100%;animation:yix-shimmer 1.2s infinite}
-.card img.loaded{animation:none;background:var(--border)}
+.card img{opacity:0;transition:opacity .25s;background-color:var(--border);background-image:linear-gradient(90deg,var(--border),rgba(150,150,150,.22),var(--border));background-size:200% 100%;animation:yix-shimmer 1.2s infinite}
+.card img.loaded{opacity:1;animation:none;background:var(--border)}
 .search{
  max-width:1200px;
  margin:auto;
@@ -291,7 +291,7 @@ tez, qulay va zamonaviy interfeysda kuzating.
 const API="https://yix-news.onrender.com/api/site-news";
 const PAGE_SIZE=50;
 const CACHE_KEY="yix-news-cache-v2";
-const LANGUAGE_OPTIONS={uzbekistan:[["uz","O‘zbekcha"],["ru","Русский"]],usa:[["en","English"]],uk:[["en","English"]],russia:[["ru","Русский"]],turkey:[["tr","Türkçe"],["en","English"]],india:[["en","English"],["hi","हिन्दी"]],international:[["en","English"]]};
+const LANGUAGE_OPTIONS={uzbekistan:[["uz","O‘zbekcha"],["ru","Русский"]],usa:[["en","English"]],uk:[["en","English"]],russia:[["ru","Русский"]],turkey:[["tr","Türkçe"],["en","English"]],india:[["en","English"]],international:[["en","English"]]};
 let country=localStorage.getItem("yix-country")||"uzbekistan";
 let language=localStorage.getItem("yix-language")||"uz";
 let category="";
@@ -413,7 +413,7 @@ async function load(reset=true){
 
    articles.push(...incoming);
    offset+=incoming.length;
-   localStorage.setItem(CACHE_KEY,JSON.stringify({country,language,articles:articles.slice(0,100)}));
+   localStorage.setItem(CACHE_KEY+":"+country+":"+language,JSON.stringify({country,language,articles:articles.slice(0,100)}));
 
    render();
 
@@ -425,7 +425,7 @@ async function load(reset=true){
  }catch(e){
 
    let cached=null;
-   try{cached=JSON.parse(localStorage.getItem(CACHE_KEY)||"null");}catch{}
+   try{cached=JSON.parse(localStorage.getItem(CACHE_KEY+":"+country+":"+language)||"null");}catch{}
    if(reset && cached && Array.isArray(cached.articles) && cached.articles.length){articles=cached.articles;render();status.textContent="📴 Internet yo‘q. Oxirgi saqlangan yangiliklar ko‘rsatilmoqda.";}else{status.textContent="📴 Internet yo‘q. Skeleton loading davom etmoqda; ulanish tiklanganda qayta yuklanadi.";}
 
  }finally{
