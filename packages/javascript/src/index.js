@@ -31,7 +31,7 @@ export class YIXNews {
   }
 
   async request(path, { query, headers = {}, signal } = {}) {
-    const url = new URL(\`\${this.baseUrl}/api/\${String(path).replace(/^\\/+/, "")}\`);
+    const url = new URL(`${this.baseUrl}/api/${String(path).replace(/^\/+/, "")}`);
     if (query) {
       for (const [key, value] of Object.entries(query)) {
         if (value !== undefined && value !== null && value !== "") {
@@ -65,7 +65,7 @@ export class YIXNews {
         method: "GET",
         headers: {
           Accept: "application/json",
-          ...(this.apiKey ? { Authorization: \`Bearer \${this.apiKey}\` } : {}),
+          ...(this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {}),
           ...headers
         },
         signal: controller.signal
@@ -83,7 +83,7 @@ export class YIXNews {
         const message =
           payload?.error ||
           payload?.message ||
-          \`YIX News API request failed (\${response.status})\`;
+          `YIX News API request failed (${response.status})`;
         throw new YIXNewsError(message, {
           status: response.status,
           payload,
