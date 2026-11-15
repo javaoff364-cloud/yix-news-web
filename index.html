@@ -288,7 +288,7 @@ tez, qulay va zamonaviy interfeysda kuzating.
 <script>
 const API="https://yix-news.onrender.com/api/site-news";
 const PAGE_SIZE=50;
-const CACHE_KEY="yix-news-cache-v3";
+const CACHE_KEY="yix-news-cache-v4";
 const LANGUAGE_OPTIONS={uzbekistan:[["uz","🇺🇿 O‘zbekcha"],["ru","🇷🇺 Русский"]],usa:[["en","🇺🇸 English"]],uk:[["en","🇬🇧 English"]],russia:[["ru","🇷🇺 Русский"]],turkey:[["tr","🇹🇷 Türkçe"],["en","🇬🇧 English"]],india:[["en","🇮🇳 English"]],international:[["en","🌐 English"]]};
 let country=localStorage.getItem("yix-country")||"uzbekistan";
 let language=localStorage.getItem("yix-language")||"uz";
@@ -296,6 +296,7 @@ let category="";
 let offset=0;
 let articles=[];
 let loading=false;
+let requestVersion=0;
 
 const news=document.getElementById("news");
 const status=document.getElementById("status");
@@ -376,8 +377,8 @@ function escapeHtml(text){
 
 async function load(reset=true){
 
- if(loading)return;
-
+ if(loading && !reset)return;
+ const requestId=++requestVersion;
  loading=true;
 
  if(reset){
@@ -403,11 +404,15 @@ async function load(reset=true){
 
    if(!data.success)throw new Error(data.error || "API error");
 
+   if(requestId!==requestVersion)return;
    const incoming=data.news||[];
+   const matchingIncoming=category
+     ? incoming.filter(item=>item.category===category)
+     : incoming;
 
-   articles.push(...incoming);
+   articles.push(...matchingIncoming);
    offset+=incoming.length;
-   localStorage.setItem(CACHE_KEY+":"+country+":"+language+":"+category,JSON.stringify({country,language,articles:articles.slice(0,100)}));
+   localStorage.setItem(CACHE_KEY+":"+country+":"+language+":"+category,JSON.stringify({country,language,category,articles:articles.slice(0,100)}));
 
    render();
 
@@ -418,12 +423,14 @@ async function load(reset=true){
 
  }catch(e){
 
+   if(requestId!==requestVersion)return;
    let cached=null;
-   try{cached=JSON.parse(localStorage.getItem(CACHE_KEY+":"+country+":"+language)||"null");}catch{}
-   if(reset && cached && Array.isArray(cached.articles) && cached.articles.length){articles=cached.articles;render();status.textContent="Internet aloqasi yo‘q. Saqlangan so‘nggi yangiliklar ko‘rsatilmoqda.";}else{status.textContent="Internet aloqasi yo‘q. Ulanish tiklanganda yangiliklar qayta yuklanadi.";}
+   const cacheKey=CACHE_KEY+":"+country+":"+language+":"+category;
+   try{cached=JSON.parse(localStorage.getItem(cacheKey)||"null");}catch{}
+   if(reset && cached && cached.country===country && cached.language===language && cached.category===category && Array.isArray(cached.articles) && cached.articles.length){articles=cached.articles;render();status.textContent="Internet aloqasi yo‘q. Saqlangan so‘nggi yangiliklar ko‘rsatilmoqda.";}else{status.textContent="Internet aloqasi yo‘q. Ulanish tiklanganda yangiliklar qayta yuklanadi.";}
 
  }finally{
-   loading=false;
+   if(requestId===requestVersion)loading=false;
  }
 }
 
