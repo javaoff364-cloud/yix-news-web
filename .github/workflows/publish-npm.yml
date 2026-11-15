@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   publish:
@@ -22,7 +21,10 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
-      - name: Update npm CLI for trusted publishing
+      - name: Update npm CLI
         run: npm install --global npm@latest
       - run: npm test
-      - run: npm publish --access public --provenance
+      - name: Stage package for first publication
+        run: npm stage publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
