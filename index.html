@@ -190,12 +190,18 @@ button,.navlink{
  font-size:14px;
 }
 
-.read{
+ .read{
  display:inline-block;
  margin-top:14px;
  color:var(--accent);
  font-weight:800;
  text-decoration:none;
+}
+
+.date{
+ color:var(--muted);
+ font-size:12px;
+ margin-top:6px;
 }
 
 #loadMore{
@@ -216,7 +222,8 @@ footer{
  .hero{padding:40px 15px 20px}
  .search,.categories,.status,.grid{padding-left:15px;padding-right:15px}
  .grid{grid-template-columns:1fr}
- .navlink{display:none}
+ .navlink{display:inline-flex;padding:8px 9px;font-size:12px}
+ .actions{gap:5px}
 }
 </style>
 </head>
@@ -230,7 +237,7 @@ footer{
 <div class="actions">
 <a class="navlink" href="docs.html">API Docs</a>
 <a class="navlink" href="dashboard.html">API</a>
-<button onclick="toggleTheme()">🌙</button>
+<button id="themeToggle" onclick="toggleTheme()" aria-label="Dark mode">🌙</button>
 </div>
 </div>
 </header>
@@ -284,23 +291,36 @@ const status=document.getElementById("status");
 const loadMore=document.getElementById("loadMore");
 const search=document.getElementById("search");
 
+function updateThemeButton(){
+ const dark=document.documentElement.dataset.theme==="dark";
+ const button=document.getElementById("themeToggle");
+ if(button){
+   button.textContent=dark?"☀️":"🌙";
+   button.setAttribute("aria-label",dark?"Light mode":"Dark mode");
+ }
+}
+
 function toggleTheme(){
  const dark=document.documentElement.dataset.theme==="dark";
-
  document.documentElement.dataset.theme=dark?"":"dark";
-
- localStorage.setItem(
-   "yix-theme",
-   dark?"light":"dark"
- );
+ localStorage.setItem("yix-theme",dark?"light":"dark");
+ updateThemeButton();
 }
 
 if(localStorage.getItem("yix-theme")==="dark"){
  document.documentElement.dataset.theme="dark";
 }
+updateThemeButton();
 
 function safeUrl(value){
  try{const u=new URL(value);return ["http:","https:"].includes(u.protocol)?u.href:"";}catch{return "";}
+}
+
+function formatDate(value){
+ if(!value)return "";
+ const date=new Date(value);
+ if(Number.isNaN(date.getTime()))return "";
+ return new Intl.DateTimeFormat("uz-UZ",{dateStyle:"medium",timeStyle:"short"}).format(date);
 }
 
 function render(){
@@ -316,7 +336,7 @@ function render(){
    return text.includes(q);
  });
 
- news.innerHTML=filtered.map(a=>{ const href=safeUrl(a.link||a.url); const image=safeUrl(a.image); return `
+ news.innerHTML=filtered.map(a=>{ const href=safeUrl(a.link||a.url); const image=safeUrl(a.image); const date=formatDate(a.published_at); return `
  <article class="card">
    <img
     src="${image || 'https://placehold.co/800x500?text=YIX+NEWS'}"
@@ -324,6 +344,7 @@ function render(){
    >
    <div class="content">
      ${href ? `<a class="source" href="${href}" target="_blank" rel="noopener noreferrer">${escapeHtml(a.source || "YIX News")} ↗</a>` : `<div class="source">${escapeHtml(a.source || "YIX News")}</div>`}
+     ${date ? `<div class="date">${escapeHtml(date)}</div>` : ""}
      <div class="title">${escapeHtml(a.title || "")}</div>
      <div class="summary">${escapeHtml(a.summary || "")}</div>
      ${href ? `<a class="read" href="${href}" target="_blank" rel="noopener noreferrer">Maqolani o‘qish →</a>` : ""}
