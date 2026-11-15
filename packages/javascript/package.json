@@ -1,7 +1,7 @@
 {
   "name": "yixnews",
-  "version": "1.0.0",
-  "description": "Official JavaScript and TypeScript client for the YIX News API",
+  "version": "1.0.1",
+  "description": "Official JavaScript, TypeScript and CLI client for the YIX News API",
   "type": "module",
   "main": "./src/index.js",
   "module": "./src/index.js",
@@ -12,13 +12,17 @@
       "import": "./src/index.js"
     }
   },
-  "files": ["src", "README.md", "LICENSE"],
+  "bin": {
+    "yixnews": "./bin/yixnews.js"
+  },
+  "files": ["src", "bin", "README.md", "TERMUX.md", "LICENSE"],
   "engines": { "node": ">=18" },
   "scripts": {
-    "test": "node --test",
+    "test": "node --test && npm run test:types",
+    "test:types": "npx --yes --package typescript tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --lib ES2022,DOM type-tests/types.test.ts",
     "prepublishOnly": "npm test"
   },
-  "keywords": ["yixnews", "news", "news-api", "uzbekistan"],
+  "keywords": ["yixnews", "news", "news-api", "uzbekistan", "cli", "typescript"],
   "license": "MIT",
   "repository": {
     "type": "git",
