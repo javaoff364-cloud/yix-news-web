@@ -1,0 +1,30 @@
+{
+  "name": "yixnews",
+  "version": "1.0.0",
+  "description": "Official JavaScript and TypeScript client for the YIX News API",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
+  "files": ["src", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": ["yixnews", "news", "news-api", "uzbekistan"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/javaoff364-cloud/yix-news-web.git",
+    "directory": "packages/javascript"
+  },
+  "homepage": "https://yixnews.vercel.app/docs.html",
+  "bugs": { "url": "https://github.com/javaoff364-cloud/yix-news-web/issues" }
+}
