@@ -1,64 +1,132 @@
 # yixnews
 
-Official JavaScript / TypeScript SDK for the [YIX News API](https://yixnews-api.vercel.app).
+Official JavaScript / TypeScript SDK and command-line tool for the [YIX News API](https://yixnews-api.vercel.app).
 
-## Install
+## Requirements
 
-```bash
+- Node.js 18 or newer
+- Uses the built-in Fetch API; no runtime dependencies
+
+## Install the SDK
+
+\`\`\`bash
 npm install yixnews
-```
+\`\`\`
 
-Node.js 18+ is required (uses the built-in Fetch API).
+## JavaScript quick start
 
-## Quick start
-
-```js
+\`\`\`js
 import { YIXNews } from "yixnews";
 
 const yix = new YIXNews();
-const result = await yix.getNews({ country: "uzbekistan", language: "uz", limit: 10 });
+const result = await yix.getNews({
+  country: "uzbekistan",
+  language: "uz",
+  limit: 10
+});
 
 for (const article of result.news) {
-  console.log(article.title, article.url);
+  console.log(article.title, article.link);
 }
-```
+\`\`\`
 
-## Methods
-
-- `getNews({ category, country, language, limit, offset })` — fetch public news.
-- `getCategories()` — derive available categories from the latest public news.
-- `getSources()` — derive available sources from the latest public news.
-- `getApiStatus()` — check the API gateway health endpoint.
-
-Supported countries: `uzbekistan`, `usa`, `uk`, `russia`, `turkey`, `india`, `international`.
-Supported languages: `uz`, `ru`, `en`, `tr`, `hi`.
+The normalized article fields are \`id\`, \`title\`, \`link\`, \`summary\`, \`image\`,
+\`video_url\`, \`source\`, \`category\`, \`country\`, \`language\`, and \`published_at\`.
+Use \`link\` for the article URL and \`summary\` for its description.
 
 ## TypeScript
 
 Type declarations are included:
 
-```ts
-import { YIXNews, type NewsQuery } from "yixnews";
+\`\`\`ts
+import {
+  YIXNews,
+  type NewsItem,
+  type NewsQuery,
+  type NewsResponse
+} from "yixnews";
 
 const client = new YIXNews({ timeout: 15000 });
-const query: NewsQuery = { category: "Technology", limit: 20 };
-const response = await client.getNews(query);
-```
+const query: NewsQuery = {
+  country: "uzbekistan",
+  language: "uz",
+  limit: 20
+};
 
-## Options
+const response: NewsResponse = await client.getNews(query);
+const firstArticle: NewsItem | undefined = response.news[0];
 
-```js
+console.log(firstArticle?.title, firstArticle?.link);
+\`\`\`
+
+## Methods
+
+- \`getNews({ category, country, language, limit, offset, signal })\` — fetch public news.
+- \`getCategories(options?)\` — derive available categories from recent news.
+- \`getSources(options?)\` — derive available sources from recent news.
+- \`getApiStatus({ signal? })\` — check the API gateway health endpoint.
+
+Supported countries: \`uzbekistan\`, \`usa\`, \`uk\`, \`russia\`, \`turkey\`, \`india\`, \`international\`.
+
+Supported languages: \`uz\`, \`ru\`, \`en\`, \`tr\`, \`hi\`.
+
+## Options and errors
+
+\`\`\`js
 const yix = new YIXNews({
   baseUrl: "https://yixnews-api.vercel.app",
   timeout: 10000
 });
-```
+\`\`\`
 
-If you need to cancel a request, pass an `AbortSignal` in the query options.
+Pass an \`AbortSignal\` in request options to cancel a request:
 
-## Errors
+\`\`\`js
+const controller = new AbortController();
+const pending = yix.getNews({ country: "uzbekistan", signal: controller.signal });
+controller.abort();
+await pending;
+\`\`\`
 
-Requests throw `YIXNewsError`, which includes `status`, `payload`, and `url` fields when available.
+Requests throw \`YIXNewsError\`, which includes \`status\`, \`payload\`, and \`url\`.
+Timeout errors and user-cancelled requests have distinct messages.
+
+## Command-line interface
+
+Run without installing globally:
+
+\`\`\`bash
+npx yixnews --help
+npx yixnews status
+npx yixnews news --country uzbekistan --language uz --limit 10
+npx yixnews categories --country uzbekistan --language uz
+npx yixnews sources --country uzbekistan --language uz
+\`\`\`
+
+Available commands:
+
+| Command | Description |
+| --- | --- |
+| \`status\` | Show API and backend health |
+| \`news\` | List recent news |
+| \`categories\` | List categories found in recent news |
+| \`sources\` | List sources found in recent news |
+| \`--version\` | Show installed CLI version |
+| \`--help\` | Show usage information |
+
+The \`news\`, \`categories\`, and \`sources\` commands accept \`--country\`,
+\`--language\`, and \`--category\`. The \`news\` command also accepts
+\`--limit\` and \`--offset\`. Add \`--json\` to print raw JSON.
+
+For a custom API origin, set \`YIXNEWS_API_URL\`:
+
+\`\`\`bash
+YIXNEWS_API_URL=https://yixnews-api.vercel.app npx yixnews status
+\`\`\`
+
+## Termux / Android
+
+See [TERMUX.md](./TERMUX.md) for installation and troubleshooting instructions.
 
 ## Links
 
